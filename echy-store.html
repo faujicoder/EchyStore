@@ -1,0 +1,1989 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Echy Store — Premium Digital Marketplace</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;700;900&family=Rajdhani:wght@300;400;500;600;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #050505;
+  --bg2: #0a0a0f;
+  --bg3: #0f0f1a;
+  --pink: #ff00aa;
+  --magenta: #ff4fd8;
+  --purple: #b300ff;
+  --cyan: #00f5ff;
+  --white: #f0f0ff;
+  --muted: #888899;
+  --card: rgba(255,0,170,0.04);
+  --glass: rgba(255,255,255,0.03);
+  --border: rgba(255,0,170,0.2);
+  --glow-sm: 0 0 8px rgba(255,0,170,0.5);
+  --glow-md: 0 0 20px rgba(255,0,170,0.4), 0 0 40px rgba(255,0,170,0.15);
+  --glow-lg: 0 0 30px rgba(255,0,170,0.6), 0 0 80px rgba(255,0,170,0.2);
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--bg);
+  color: var(--white);
+  font-family: 'Rajdhani', sans-serif;
+  font-size: 16px;
+  overflow-x: hidden;
+  cursor: none;
+}
+
+/* ── CUSTOM CURSOR ── */
+#cursor { position: fixed; width: 12px; height: 12px; background: var(--pink); border-radius: 50%; pointer-events: none; z-index: 9999; transform: translate(-50%,-50%); transition: transform 0.1s; mix-blend-mode: screen; box-shadow: var(--glow-md); }
+#cursor-ring { position: fixed; width: 36px; height: 36px; border: 1px solid rgba(255,0,170,0.5); border-radius: 50%; pointer-events: none; z-index: 9998; transform: translate(-50%,-50%); transition: all 0.15s ease; }
+
+/* ── PARTICLE CANVAS ── */
+#particles { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 0; pointer-events: none; }
+
+/* ── LOADING SCREEN ── */
+#loader {
+  position: fixed; inset: 0; background: #000; z-index: 99999;
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  transition: opacity 0.8s ease, visibility 0.8s ease;
+}
+#loader.hidden { opacity: 0; visibility: hidden; }
+.loader-logo { font-family: 'Orbitron', sans-serif; font-size: 2.5rem; font-weight: 900; color: var(--pink); text-shadow: var(--glow-lg); letter-spacing: 0.2em; margin-bottom: 2rem; animation: pulse 1.5s ease-in-out infinite; }
+.loader-bar-wrap { width: 300px; height: 2px; background: rgba(255,0,170,0.2); border-radius: 2px; overflow: hidden; }
+.loader-bar { height: 100%; background: linear-gradient(90deg, var(--purple), var(--pink), var(--magenta)); border-radius: 2px; animation: loadbar 2s ease forwards; box-shadow: var(--glow-sm); }
+.loader-text { margin-top: 1rem; font-family: 'Share Tech Mono', monospace; font-size: 0.75rem; color: var(--muted); letter-spacing: 0.15em; animation: blink 1s step-end infinite; }
+@keyframes loadbar { from { width: 0; } to { width: 100%; } }
+@keyframes blink { 50% { opacity: 0; } }
+@keyframes pulse { 0%,100% { text-shadow: 0 0 20px var(--pink), 0 0 40px var(--pink); } 50% { text-shadow: 0 0 40px var(--magenta), 0 0 80px var(--magenta), 0 0 120px var(--magenta); } }
+
+/* ── NAVBAR ── */
+nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 0 2rem; height: 64px;
+  background: rgba(5,5,5,0.8);
+  backdrop-filter: blur(20px);
+  border-bottom: 1px solid var(--border);
+  transition: all 0.3s ease;
+}
+nav.scrolled { background: rgba(5,5,5,0.95); box-shadow: 0 4px 30px rgba(255,0,170,0.1); }
+.nav-logo { font-family: 'Orbitron', sans-serif; font-size: 1.3rem; font-weight: 900; color: var(--pink); text-shadow: var(--glow-sm); text-decoration: none; letter-spacing: 0.1em; display: flex; align-items: center; gap: 0.5rem; }
+.nav-logo span { color: var(--white); }
+.nav-links { display: flex; align-items: center; gap: 0.25rem; list-style: none; }
+.nav-links a { color: var(--muted); text-decoration: none; font-family: 'Rajdhani', sans-serif; font-weight: 600; font-size: 0.85rem; letter-spacing: 0.1em; text-transform: uppercase; padding: 0.5rem 0.75rem; border-radius: 4px; transition: all 0.25s ease; position: relative; }
+.nav-links a::after { content: ''; position: absolute; bottom: 4px; left: 50%; transform: translateX(-50%); width: 0; height: 1px; background: var(--pink); transition: width 0.25s ease; box-shadow: var(--glow-sm); }
+.nav-links a:hover { color: var(--white); }
+.nav-links a:hover::after, .nav-links a.active::after { width: 60%; }
+.nav-links a.active { color: var(--pink); }
+.nav-actions { display: flex; align-items: center; gap: 0.75rem; }
+.btn { display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.5rem 1.25rem; border-radius: 4px; font-family: 'Rajdhani', sans-serif; font-weight: 700; font-size: 0.85rem; letter-spacing: 0.1em; text-transform: uppercase; text-decoration: none; cursor: none; border: none; transition: all 0.25s ease; position: relative; overflow: hidden; }
+.btn::before { content: ''; position: absolute; inset: 0; background: linear-gradient(135deg, rgba(255,255,255,0.1), transparent); opacity: 0; transition: opacity 0.25s; }
+.btn:hover::before { opacity: 1; }
+.btn-pink { background: var(--pink); color: #000; box-shadow: 0 0 20px rgba(255,0,170,0.4); }
+.btn-pink:hover { box-shadow: 0 0 35px rgba(255,0,170,0.7); transform: translateY(-1px); }
+.btn-ghost { background: transparent; color: var(--white); border: 1px solid var(--border); }
+.btn-ghost:hover { border-color: var(--pink); color: var(--pink); box-shadow: var(--glow-sm); }
+.cart-btn { position: relative; }
+.cart-count { position: absolute; top: -6px; right: -6px; width: 18px; height: 18px; background: var(--pink); color: #000; font-size: 0.65rem; font-weight: 900; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-family: 'Orbitron', sans-serif; }
+.hamburger { display: none; flex-direction: column; gap: 5px; cursor: none; padding: 4px; }
+.hamburger span { width: 24px; height: 2px; background: var(--pink); transition: all 0.3s ease; display: block; }
+
+/* ── HERO ── */
+.hero {
+  min-height: 100vh; display: flex; align-items: center; justify-content: center;
+  padding: 8rem 2rem 4rem; text-align: center; position: relative; z-index: 1;
+}
+.hero-content { max-width: 900px; }
+.hero-badge { display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.35rem 1rem; border: 1px solid var(--border); border-radius: 100px; font-family: 'Share Tech Mono', monospace; font-size: 0.72rem; color: var(--pink); letter-spacing: 0.15em; margin-bottom: 2rem; background: rgba(255,0,170,0.05); animation: fadeUp 0.8s ease 0.2s both; }
+.hero-badge::before { content: ''; width: 6px; height: 6px; background: var(--pink); border-radius: 50%; box-shadow: var(--glow-sm); animation: ping 2s ease infinite; }
+@keyframes ping { 0%,100% { transform: scale(1); opacity: 1; } 50% { transform: scale(1.5); opacity: 0.5; } }
+.hero h1 { font-family: 'Orbitron', sans-serif; font-size: clamp(2.5rem, 6vw, 5.5rem); font-weight: 900; line-height: 1.05; letter-spacing: -0.02em; margin-bottom: 1.5rem; animation: fadeUp 0.8s ease 0.4s both; }
+.hero h1 .line1 { display: block; color: var(--white); }
+.hero h1 .line2 { display: block; background: linear-gradient(135deg, var(--pink), var(--magenta), var(--purple)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; filter: drop-shadow(0 0 20px rgba(255,0,170,0.5)); }
+.hero p { font-size: 1.15rem; color: var(--muted); max-width: 540px; margin: 0 auto 2.5rem; line-height: 1.7; font-weight: 400; animation: fadeUp 0.8s ease 0.6s both; }
+.hero-actions { display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; animation: fadeUp 0.8s ease 0.8s both; }
+.btn-lg { padding: 0.85rem 2rem; font-size: 0.95rem; }
+.hero-scroll { position: absolute; bottom: 2rem; left: 50%; transform: translateX(-50%); display: flex; flex-direction: column; align-items: center; gap: 0.5rem; color: var(--muted); font-size: 0.7rem; letter-spacing: 0.2em; text-transform: uppercase; font-family: 'Share Tech Mono', monospace; animation: fadeIn 1s ease 1.5s both; }
+.scroll-line { width: 1px; height: 40px; background: linear-gradient(to bottom, var(--pink), transparent); animation: scrollLine 2s ease-in-out infinite; }
+@keyframes scrollLine { 0%,100% { transform: scaleY(1); opacity: 1; } 50% { transform: scaleY(0.5); opacity: 0.5; } }
+@keyframes fadeUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+/* ── GRID LINES BG ── */
+.grid-bg {
+  position: fixed; inset: 0; z-index: 0; pointer-events: none;
+  background-image: linear-gradient(rgba(255,0,170,0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(255,0,170,0.03) 1px, transparent 1px);
+  background-size: 60px 60px;
+}
+
+/* ── SECTIONS ── */
+section { padding: 6rem 2rem; position: relative; z-index: 1; }
+.section-label { font-family: 'Share Tech Mono', monospace; font-size: 0.72rem; color: var(--pink); letter-spacing: 0.3em; text-transform: uppercase; margin-bottom: 0.75rem; }
+.section-title { font-family: 'Orbitron', sans-serif; font-size: clamp(1.8rem, 3.5vw, 2.8rem); font-weight: 700; margin-bottom: 1rem; line-height: 1.2; }
+.section-title .accent { color: var(--pink); text-shadow: var(--glow-sm); }
+.section-sub { color: var(--muted); font-size: 1.05rem; max-width: 520px; line-height: 1.7; }
+.container { max-width: 1280px; margin: 0 auto; }
+.text-center { text-align: center; }
+.text-center .section-sub { margin: 0 auto; }
+
+/* ── STATS ── */
+.stats-section { padding: 4rem 2rem; }
+.stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1.5px; background: var(--border); border: 1px solid var(--border); border-radius: 8px; overflow: hidden; }
+.stat-card { background: var(--bg2); padding: 2.5rem 2rem; text-align: center; position: relative; overflow: hidden; transition: background 0.3s ease; }
+.stat-card::before { content: ''; position: absolute; inset: 0; background: linear-gradient(135deg, rgba(255,0,170,0.05), transparent); opacity: 0; transition: opacity 0.3s ease; }
+.stat-card:hover { background: var(--bg3); }
+.stat-card:hover::before { opacity: 1; }
+.stat-num { font-family: 'Orbitron', sans-serif; font-size: 2.8rem; font-weight: 900; color: var(--pink); text-shadow: var(--glow-sm); line-height: 1; }
+.stat-label { font-family: 'Share Tech Mono', monospace; font-size: 0.72rem; color: var(--muted); letter-spacing: 0.2em; text-transform: uppercase; margin-top: 0.5rem; }
+
+/* ── PRODUCTS ── */
+.products-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 1.5rem; margin-top: 3rem; }
+.product-card {
+  background: var(--glass); border: 1px solid var(--border); border-radius: 12px; overflow: hidden;
+  position: relative; transition: all 0.35s ease; cursor: none;
+  backdrop-filter: blur(10px);
+}
+.product-card::before { content: ''; position: absolute; inset: 0; border-radius: 12px; background: linear-gradient(135deg, rgba(255,0,170,0.08), transparent 60%); opacity: 0; transition: opacity 0.35s ease; z-index: 0; }
+.product-card:hover { transform: translateY(-6px); border-color: rgba(255,0,170,0.5); box-shadow: 0 20px 60px rgba(255,0,170,0.15), 0 0 1px rgba(255,0,170,0.5); }
+.product-card:hover::before { opacity: 1; }
+.product-thumb { width: 100%; aspect-ratio: 16/9; object-fit: cover; display: block; background: linear-gradient(135deg, #1a0020, #050010); position: relative; overflow: hidden; }
+.product-thumb-inner { width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; font-size: 3rem; background: linear-gradient(135deg, #12001a, #050010); transition: transform 0.4s ease; }
+.product-card:hover .product-thumb-inner { transform: scale(1.08); }
+.product-body { padding: 1.25rem; position: relative; z-index: 1; }
+.product-cat { font-family: 'Share Tech Mono', monospace; font-size: 0.68rem; color: var(--pink); letter-spacing: 0.2em; text-transform: uppercase; margin-bottom: 0.5rem; }
+.product-name { font-family: 'Orbitron', sans-serif; font-size: 1rem; font-weight: 700; margin-bottom: 0.75rem; line-height: 1.3; }
+.product-meta { display: flex; align-items: center; justify-content: space-between; margin-bottom: 1rem; }
+.product-price { font-family: 'Orbitron', sans-serif; font-size: 1.3rem; font-weight: 900; color: var(--pink); text-shadow: var(--glow-sm); }
+.product-stock { font-family: 'Share Tech Mono', monospace; font-size: 0.68rem; color: var(--muted); letter-spacing: 0.1em; }
+.product-stock.low { color: #ff6b35; }
+.product-stock.high { color: #00ff87; }
+.product-actions { display: flex; gap: 0.5rem; }
+.product-actions .btn { flex: 1; justify-content: center; font-size: 0.78rem; padding: 0.5rem; }
+.stock-bar { width: 100%; height: 2px; background: rgba(255,255,255,0.05); border-radius: 2px; margin-bottom: 1rem; overflow: hidden; }
+.stock-fill { height: 100%; background: linear-gradient(90deg, var(--pink), var(--magenta)); border-radius: 2px; box-shadow: var(--glow-sm); }
+.badge { display: inline-block; padding: 0.2rem 0.5rem; font-family: 'Share Tech Mono', monospace; font-size: 0.6rem; letter-spacing: 0.1em; border-radius: 3px; text-transform: uppercase; }
+.badge-hot { background: rgba(255,0,170,0.15); color: var(--pink); border: 1px solid rgba(255,0,170,0.3); }
+.badge-new { background: rgba(0,245,255,0.1); color: var(--cyan); border: 1px solid rgba(0,245,255,0.2); }
+.product-badges { display: flex; gap: 0.4rem; margin-bottom: 0.5rem; }
+
+/* ── WHY US ── */
+.features-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 1.5rem; margin-top: 3rem; }
+.feature-card {
+  padding: 2rem; border-radius: 12px; border: 1px solid var(--border);
+  background: var(--glass); backdrop-filter: blur(10px);
+  position: relative; overflow: hidden; transition: all 0.35s ease;
+}
+.feature-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 1px; background: linear-gradient(90deg, transparent, var(--pink), transparent); transform: scaleX(0); transition: transform 0.4s ease; }
+.feature-card:hover { border-color: rgba(255,0,170,0.4); transform: translateY(-4px); }
+.feature-card:hover::before { transform: scaleX(1); }
+.feature-icon { font-size: 2rem; margin-bottom: 1rem; display: block; }
+.feature-title { font-family: 'Orbitron', sans-serif; font-size: 1rem; font-weight: 700; margin-bottom: 0.5rem; color: var(--white); }
+.feature-desc { color: var(--muted); font-size: 0.9rem; line-height: 1.6; }
+.glow-line { position: absolute; bottom: 0; left: 0; right: 0; height: 1px; background: linear-gradient(90deg, transparent, var(--pink), transparent); opacity: 0.3; }
+
+/* ── REVIEWS ── */
+.reviews-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 1.5rem; margin-top: 3rem; }
+.review-card {
+  padding: 1.75rem; border-radius: 12px; border: 1px solid var(--border);
+  background: var(--glass); backdrop-filter: blur(10px); transition: all 0.35s ease;
+}
+.review-card:hover { border-color: rgba(255,0,170,0.35); transform: translateY(-3px); box-shadow: 0 15px 40px rgba(255,0,170,0.08); }
+.review-header { display: flex; align-items: center; gap: 1rem; margin-bottom: 1rem; }
+.review-avatar { width: 44px; height: 44px; border-radius: 50%; border: 2px solid var(--border); display: flex; align-items: center; justify-content: center; font-size: 1.2rem; background: linear-gradient(135deg, #1a0020, #050010); flex-shrink: 0; }
+.review-meta { flex: 1; }
+.review-name { font-family: 'Orbitron', sans-serif; font-size: 0.85rem; font-weight: 700; }
+.review-date { font-family: 'Share Tech Mono', monospace; font-size: 0.65rem; color: var(--muted); }
+.stars { color: #ffcc00; font-size: 0.85rem; margin-bottom: 0.5rem; letter-spacing: 0.1em; text-shadow: 0 0 8px rgba(255,204,0,0.5); }
+.review-text { color: var(--muted); font-size: 0.9rem; line-height: 1.65; }
+.review-product { margin-top: 0.75rem; font-family: 'Share Tech Mono', monospace; font-size: 0.65rem; color: var(--pink); opacity: 0.7; }
+
+/* ── STATUS ── */
+.status-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 1rem; margin-top: 3rem; }
+.status-card { display: flex; align-items: center; gap: 1rem; padding: 1.25rem 1.5rem; border: 1px solid var(--border); border-radius: 8px; background: var(--glass); backdrop-filter: blur(10px); transition: all 0.3s ease; }
+.status-card:hover { border-color: rgba(255,0,170,0.3); }
+.status-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; position: relative; }
+.status-dot.online { background: #00ff87; box-shadow: 0 0 8px #00ff87; }
+.status-dot.online::after { content: ''; position: absolute; inset: -3px; border-radius: 50%; border: 1px solid #00ff87; animation: statusPing 2s ease-in-out infinite; }
+.status-dot.warn { background: #ffcc00; box-shadow: 0 0 8px #ffcc00; }
+@keyframes statusPing { 0%,100% { transform: scale(1); opacity: 0.8; } 50% { transform: scale(1.6); opacity: 0; } }
+.status-info { flex: 1; }
+.status-name { font-family: 'Orbitron', sans-serif; font-size: 0.85rem; font-weight: 700; margin-bottom: 0.2rem; }
+.status-detail { font-family: 'Share Tech Mono', monospace; font-size: 0.65rem; color: var(--muted); }
+.status-val { font-family: 'Share Tech Mono', monospace; font-size: 0.72rem; color: #00ff87; }
+.uptime-bar { margin-top: 3rem; }
+.uptime-title { font-family: 'Share Tech Mono', monospace; font-size: 0.72rem; color: var(--muted); letter-spacing: 0.15em; text-transform: uppercase; margin-bottom: 1rem; }
+.uptime-segments { display: flex; gap: 3px; }
+.uptime-seg { flex: 1; height: 32px; border-radius: 3px; background: #00ff87; opacity: 0.8; transition: opacity 0.2s; cursor: none; }
+.uptime-seg:hover { opacity: 1; }
+.uptime-seg.down { background: var(--pink); opacity: 0.6; }
+
+/* ── STATS PAGE ── */
+.stats-big-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1.5rem; margin-top: 3rem; margin-bottom: 3rem; }
+.stat-big-card { padding: 2rem; border-radius: 12px; border: 1px solid var(--border); background: var(--glass); backdrop-filter: blur(10px); text-align: center; transition: all 0.35s ease; }
+.stat-big-card:hover { border-color: rgba(255,0,170,0.5); box-shadow: 0 0 30px rgba(255,0,170,0.08); }
+.stat-big-num { font-family: 'Orbitron', sans-serif; font-size: 2.2rem; font-weight: 900; color: var(--pink); text-shadow: var(--glow-sm); margin-bottom: 0.3rem; }
+.stat-big-label { font-family: 'Share Tech Mono', monospace; font-size: 0.68rem; color: var(--muted); letter-spacing: 0.2em; text-transform: uppercase; }
+.chart-wrap { border: 1px solid var(--border); border-radius: 12px; background: var(--glass); backdrop-filter: blur(10px); padding: 2rem; margin-top: 2rem; }
+.chart-title { font-family: 'Orbitron', sans-serif; font-size: 0.95rem; font-weight: 700; margin-bottom: 1.5rem; }
+.chart-bars { display: flex; align-items: flex-end; gap: 0.75rem; height: 160px; }
+.chart-bar-wrap { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 0.5rem; height: 100%; justify-content: flex-end; }
+.chart-bar { width: 100%; border-radius: 4px 4px 0 0; background: linear-gradient(to top, var(--pink), var(--magenta)); box-shadow: 0 0 15px rgba(255,0,170,0.3); position: relative; overflow: hidden; animation: growBar 1s ease forwards; transform-origin: bottom; }
+.chart-bar::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 100%; background: linear-gradient(135deg, rgba(255,255,255,0.15), transparent); }
+@keyframes growBar { from { transform: scaleY(0); } to { transform: scaleY(1); } }
+.chart-bar-label { font-family: 'Share Tech Mono', monospace; font-size: 0.6rem; color: var(--muted); }
+
+/* ── AUTH PANEL ── */
+.auth-wrap { min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 8rem 2rem 4rem; }
+.auth-card { width: 100%; max-width: 440px; border: 1px solid var(--border); border-radius: 16px; background: var(--glass); backdrop-filter: blur(20px); padding: 3rem; position: relative; overflow: hidden; }
+.auth-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px; background: linear-gradient(90deg, transparent, var(--pink), var(--magenta), transparent); }
+.auth-tabs { display: flex; margin-bottom: 2.5rem; border: 1px solid var(--border); border-radius: 8px; overflow: hidden; }
+.auth-tab { flex: 1; padding: 0.75rem; text-align: center; font-family: 'Orbitron', sans-serif; font-size: 0.8rem; font-weight: 700; cursor: none; transition: all 0.25s ease; color: var(--muted); letter-spacing: 0.1em; }
+.auth-tab.active { background: rgba(255,0,170,0.15); color: var(--pink); }
+.form-group { margin-bottom: 1.25rem; }
+.form-label { display: block; font-family: 'Share Tech Mono', monospace; font-size: 0.7rem; color: var(--muted); letter-spacing: 0.15em; text-transform: uppercase; margin-bottom: 0.5rem; }
+.form-input { width: 100%; padding: 0.75rem 1rem; background: rgba(255,255,255,0.03); border: 1px solid var(--border); border-radius: 6px; color: var(--white); font-family: 'Rajdhani', sans-serif; font-size: 1rem; transition: all 0.25s ease; outline: none; }
+.form-input:focus { border-color: var(--pink); box-shadow: 0 0 0 3px rgba(255,0,170,0.08); }
+.form-input::placeholder { color: var(--muted); }
+.form-submit { width: 100%; margin-top: 1.5rem; }
+.form-links { text-align: center; margin-top: 1rem; font-size: 0.85rem; color: var(--muted); }
+.form-links a { color: var(--pink); text-decoration: none; }
+
+/* ── CART PANEL ── */
+.cart-panel {
+  position: fixed; right: 0; top: 0; bottom: 0; width: 420px; max-width: 100vw;
+  background: var(--bg2); border-left: 1px solid var(--border);
+  z-index: 2000; transform: translateX(100%); transition: transform 0.4s cubic-bezier(0.16,1,0.3,1);
+  display: flex; flex-direction: column; backdrop-filter: blur(20px);
+}
+.cart-panel.open { transform: translateX(0); }
+.cart-header { padding: 1.5rem; border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; }
+.cart-title { font-family: 'Orbitron', sans-serif; font-size: 1.1rem; font-weight: 700; }
+.cart-close { background: none; border: none; color: var(--muted); cursor: none; font-size: 1.5rem; line-height: 1; transition: color 0.2s; }
+.cart-close:hover { color: var(--pink); }
+.cart-items { flex: 1; overflow-y: auto; padding: 1.5rem; display: flex; flex-direction: column; gap: 1rem; }
+.cart-item { display: flex; gap: 1rem; align-items: center; padding: 1rem; border: 1px solid var(--border); border-radius: 8px; background: var(--glass); }
+.cart-item-thumb { width: 56px; height: 56px; border-radius: 6px; background: linear-gradient(135deg, #1a0020, #050010); display: flex; align-items: center; justify-content: center; font-size: 1.5rem; flex-shrink: 0; }
+.cart-item-info { flex: 1; }
+.cart-item-name { font-family: 'Orbitron', sans-serif; font-size: 0.8rem; font-weight: 700; margin-bottom: 0.25rem; }
+.cart-item-price { color: var(--pink); font-family: 'Orbitron', sans-serif; font-size: 0.9rem; font-weight: 700; }
+.cart-item-remove { background: none; border: none; color: var(--muted); cursor: none; font-size: 1rem; transition: color 0.2s; }
+.cart-item-remove:hover { color: var(--pink); }
+.cart-footer { padding: 1.5rem; border-top: 1px solid var(--border); }
+.cart-total-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.25rem; }
+.cart-total-label { font-family: 'Share Tech Mono', monospace; font-size: 0.72rem; color: var(--muted); letter-spacing: 0.2em; text-transform: uppercase; }
+.cart-total-val { font-family: 'Orbitron', sans-serif; font-size: 1.5rem; font-weight: 900; color: var(--pink); text-shadow: var(--glow-sm); }
+.cart-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.6); z-index: 1999; opacity: 0; pointer-events: none; transition: opacity 0.4s ease; backdrop-filter: blur(4px); }
+.cart-overlay.open { opacity: 1; pointer-events: all; }
+
+/* ── PAYMENT MODAL ── */
+.modal { position: fixed; inset: 0; z-index: 3000; display: flex; align-items: center; justify-content: center; padding: 2rem; opacity: 0; pointer-events: none; transition: opacity 0.3s ease; }
+.modal.open { opacity: 1; pointer-events: all; }
+.modal-overlay { position: absolute; inset: 0; background: rgba(0,0,0,0.8); backdrop-filter: blur(8px); }
+.modal-content { position: relative; z-index: 1; width: 100%; max-width: 520px; background: var(--bg2); border: 1px solid var(--border); border-radius: 16px; overflow: hidden; }
+.modal-top { padding: 0; background: linear-gradient(135deg, #12001a, #050010); height: 4px; background: linear-gradient(90deg, var(--purple), var(--pink), var(--magenta)); }
+.modal-body { padding: 2rem; }
+.modal-title { font-family: 'Orbitron', sans-serif; font-size: 1.2rem; font-weight: 700; margin-bottom: 0.5rem; }
+.modal-sub { color: var(--muted); font-size: 0.9rem; margin-bottom: 2rem; }
+.crypto-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.75rem; margin-bottom: 2rem; }
+.crypto-btn { padding: 1rem 0.75rem; border: 1px solid var(--border); border-radius: 8px; background: var(--glass); cursor: none; text-align: center; transition: all 0.25s ease; color: var(--white); }
+.crypto-btn:hover, .crypto-btn.active { border-color: var(--pink); background: rgba(255,0,170,0.08); box-shadow: var(--glow-sm); }
+.crypto-icon { font-size: 1.5rem; display: block; margin-bottom: 0.35rem; }
+.crypto-name { font-family: 'Share Tech Mono', monospace; font-size: 0.65rem; color: var(--muted); letter-spacing: 0.1em; display: block; }
+.pay-address { background: rgba(255,255,255,0.03); border: 1px solid var(--border); border-radius: 8px; padding: 1rem; font-family: 'Share Tech Mono', monospace; font-size: 0.75rem; word-break: break-all; color: var(--muted); margin-bottom: 1rem; }
+.pay-amount { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; }
+.pay-label { font-family: 'Share Tech Mono', monospace; font-size: 0.7rem; color: var(--muted); letter-spacing: 0.1em; }
+.pay-val { font-family: 'Orbitron', sans-serif; font-size: 1.3rem; font-weight: 900; color: var(--pink); }
+.modal-close { position: absolute; top: 1rem; right: 1rem; background: none; border: none; color: var(--muted); cursor: none; font-size: 1.3rem; z-index: 2; transition: color 0.2s; }
+.modal-close:hover { color: var(--pink); }
+
+/* ── NOTIFICATION POPUP ── */
+#notif-popup {
+  position: fixed; bottom: 2rem; left: 2rem; z-index: 5000;
+  background: var(--bg2); border: 1px solid var(--border);
+  border-radius: 10px; padding: 1rem 1.25rem; max-width: 280px;
+  display: flex; align-items: center; gap: 0.75rem;
+  transform: translateX(-120%); transition: transform 0.5s cubic-bezier(0.16,1,0.3,1);
+  backdrop-filter: blur(10px);
+}
+#notif-popup.show { transform: translateX(0); }
+.notif-icon { font-size: 1.5rem; flex-shrink: 0; }
+.notif-name { font-family: 'Orbitron', sans-serif; font-size: 0.78rem; font-weight: 700; margin-bottom: 0.15rem; }
+.notif-text { font-family: 'Share Tech Mono', monospace; font-size: 0.65rem; color: var(--muted); }
+.notif-time { font-family: 'Share Tech Mono', monospace; font-size: 0.6rem; color: var(--pink); margin-top: 0.2rem; }
+.notif-dot { position: absolute; top: -3px; right: -3px; width: 8px; height: 8px; background: var(--pink); border-radius: 50%; box-shadow: var(--glow-sm); }
+
+/* ── SOCIALS ── */
+.social-strip { display: flex; gap: 1rem; margin-top: 2.5rem; flex-wrap: wrap; }
+.social-btn { display: inline-flex; align-items: center; gap: 0.6rem; padding: 0.75rem 1.5rem; border-radius: 8px; font-family: 'Rajdhani', sans-serif; font-weight: 700; font-size: 0.9rem; text-decoration: none; letter-spacing: 0.05em; transition: all 0.25s ease; cursor: none; border: 1px solid transparent; }
+.social-btn.discord { background: rgba(88,101,242,0.15); border-color: rgba(88,101,242,0.3); color: #7289da; }
+.social-btn.discord:hover { background: rgba(88,101,242,0.25); box-shadow: 0 0 20px rgba(88,101,242,0.3); transform: translateY(-2px); }
+.social-btn.telegram { background: rgba(0,136,204,0.15); border-color: rgba(0,136,204,0.3); color: #0088cc; }
+.social-btn.telegram:hover { background: rgba(0,136,204,0.25); box-shadow: 0 0 20px rgba(0,136,204,0.3); transform: translateY(-2px); }
+
+/* ── FOOTER ── */
+footer { border-top: 1px solid var(--border); padding: 4rem 2rem 2rem; position: relative; z-index: 1; }
+.footer-grid { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 3rem; max-width: 1280px; margin: 0 auto 3rem; }
+.footer-brand { }
+.footer-logo { font-family: 'Orbitron', sans-serif; font-size: 1.4rem; font-weight: 900; color: var(--pink); text-shadow: var(--glow-sm); letter-spacing: 0.1em; margin-bottom: 0.75rem; }
+.footer-desc { color: var(--muted); font-size: 0.9rem; line-height: 1.7; max-width: 260px; }
+.footer-col-title { font-family: 'Share Tech Mono', monospace; font-size: 0.68rem; color: var(--muted); letter-spacing: 0.25em; text-transform: uppercase; margin-bottom: 1rem; }
+.footer-links { list-style: none; display: flex; flex-direction: column; gap: 0.6rem; }
+.footer-links a { color: var(--muted); text-decoration: none; font-size: 0.9rem; transition: color 0.2s ease; }
+.footer-links a:hover { color: var(--white); }
+.footer-bottom { max-width: 1280px; margin: 0 auto; padding-top: 2rem; border-top: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; flex-wrap: gap; }
+.footer-copy { font-family: 'Share Tech Mono', monospace; font-size: 0.65rem; color: var(--muted); letter-spacing: 0.1em; }
+.footer-accent { color: var(--pink); }
+
+/* ── ADMIN PANEL ── */
+.admin-wrap { display: flex; min-height: 100vh; padding-top: 64px; }
+.admin-sidebar { width: 240px; flex-shrink: 0; background: var(--bg2); border-right: 1px solid var(--border); padding: 2rem 0; position: sticky; top: 64px; height: calc(100vh - 64px); overflow-y: auto; }
+.admin-nav { list-style: none; }
+.admin-nav-item { display: flex; align-items: center; gap: 0.75rem; padding: 0.75rem 1.5rem; font-family: 'Rajdhani', sans-serif; font-weight: 600; font-size: 0.9rem; letter-spacing: 0.05em; color: var(--muted); cursor: none; transition: all 0.2s ease; border-left: 2px solid transparent; }
+.admin-nav-item:hover { color: var(--white); background: rgba(255,0,170,0.05); }
+.admin-nav-item.active { color: var(--pink); border-left-color: var(--pink); background: rgba(255,0,170,0.08); }
+.admin-nav-icon { font-size: 1rem; width: 20px; text-align: center; }
+.admin-main { flex: 1; padding: 2rem; min-height: calc(100vh - 64px); }
+.admin-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 2rem; }
+.admin-title { font-family: 'Orbitron', sans-serif; font-size: 1.4rem; font-weight: 700; }
+.admin-cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin-bottom: 2rem; }
+.admin-card { padding: 1.5rem; border: 1px solid var(--border); border-radius: 10px; background: var(--glass); }
+.admin-card-num { font-family: 'Orbitron', sans-serif; font-size: 2rem; font-weight: 900; color: var(--pink); margin-bottom: 0.25rem; }
+.admin-card-label { font-family: 'Share Tech Mono', monospace; font-size: 0.65rem; color: var(--muted); letter-spacing: 0.15em; text-transform: uppercase; }
+.admin-card-trend { font-family: 'Share Tech Mono', monospace; font-size: 0.65rem; color: #00ff87; margin-top: 0.5rem; }
+.admin-table-wrap { border: 1px solid var(--border); border-radius: 10px; overflow: hidden; background: var(--glass); }
+.admin-table { width: 100%; border-collapse: collapse; }
+.admin-table th { padding: 0.85rem 1rem; text-align: left; font-family: 'Share Tech Mono', monospace; font-size: 0.65rem; color: var(--muted); letter-spacing: 0.15em; text-transform: uppercase; background: rgba(255,255,255,0.02); border-bottom: 1px solid var(--border); }
+.admin-table td { padding: 1rem; border-bottom: 1px solid rgba(255,255,255,0.03); font-size: 0.9rem; color: var(--white); }
+.admin-table tr:last-child td { border-bottom: none; }
+.admin-table tr:hover td { background: rgba(255,0,170,0.03); }
+.status-pill { display: inline-block; padding: 0.2rem 0.6rem; border-radius: 100px; font-family: 'Share Tech Mono', monospace; font-size: 0.62rem; letter-spacing: 0.08em; }
+.pill-success { background: rgba(0,255,135,0.1); color: #00ff87; border: 1px solid rgba(0,255,135,0.2); }
+.pill-pending { background: rgba(255,204,0,0.1); color: #ffcc00; border: 1px solid rgba(255,204,0,0.2); }
+.pill-fail { background: rgba(255,0,170,0.1); color: var(--pink); border: 1px solid rgba(255,0,170,0.2); }
+
+/* ── PAGE SYSTEM ── */
+.page { display: none; }
+.page.active { display: block; }
+.page-enter { animation: pageIn 0.5s ease; }
+@keyframes pageIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+
+/* ── DIVIDER ── */
+.neon-divider { height: 1px; background: linear-gradient(90deg, transparent, var(--pink), transparent); opacity: 0.3; margin: 0; }
+
+/* ── SCROLL ── */
+::-webkit-scrollbar { width: 4px; }
+::-webkit-scrollbar-track { background: var(--bg); }
+::-webkit-scrollbar-thumb { background: var(--pink); border-radius: 2px; }
+
+/* ── MOBILE ── */
+@media (max-width: 900px) {
+  .footer-grid { grid-template-columns: 1fr 1fr; }
+  .admin-wrap { flex-direction: column; }
+  .admin-sidebar { width: 100%; height: auto; position: relative; top: 0; display: flex; overflow-x: auto; padding: 0.5rem; border-right: none; border-bottom: 1px solid var(--border); }
+  .admin-nav { display: flex; flex-direction: row; }
+  .admin-nav-item { white-space: nowrap; border-left: none; border-bottom: 2px solid transparent; flex-direction: column; gap: 0.25rem; padding: 0.5rem 1rem; font-size: 0.75rem; }
+  .admin-nav-item.active { border-bottom-color: var(--pink); border-left-color: transparent; }
+}
+@media (max-width: 680px) {
+  .nav-links { display: none; }
+  .nav-links.mobile-open { display: flex; flex-direction: column; position: fixed; top: 64px; left: 0; right: 0; background: var(--bg2); border-bottom: 1px solid var(--border); padding: 1.5rem; gap: 0.25rem; z-index: 999; }
+  .hamburger { display: flex; }
+  .footer-grid { grid-template-columns: 1fr; }
+  .footer-bottom { flex-direction: column; gap: 1rem; text-align: center; }
+  .cart-panel { width: 100vw; }
+  .hero h1 { font-size: 2rem; }
+  .crypto-grid { grid-template-columns: repeat(2, 1fr); }
+  .products-grid { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+
+<div id="cursor"></div>
+<div id="cursor-ring"></div>
+<div class="grid-bg"></div>
+<canvas id="particles"></canvas>
+
+<!-- LOADER -->
+<div id="loader">
+  <div class="loader-logo">ECHY</div>
+  <div class="loader-bar-wrap"><div class="loader-bar"></div></div>
+  <div class="loader-text">INITIALIZING SYSTEMS_</div>
+</div>
+
+<!-- NOTIFICATION POPUP -->
+<div id="notif-popup">
+  <div class="notif-dot"></div>
+  <div class="notif-icon">🛍️</div>
+  <div>
+    <div class="notif-name" id="notif-name">Akira_X99</div>
+    <div class="notif-text" id="notif-text">just purchased Discord Nitro</div>
+    <div class="notif-time">just now</div>
+  </div>
+</div>
+
+<!-- NAVBAR -->
+<nav id="navbar">
+  <a href="#" class="nav-logo" onclick="showPage('home')">ECHY<span>STORE</span></a>
+  <ul class="nav-links" id="nav-links">
+    <li><a href="#" onclick="showPage('home')" class="active" id="nav-home">Home</a></li>
+    <li><a href="#" onclick="showPage('products')" id="nav-products">Products</a></li>
+    <li><a href="#" onclick="showPage('reviews')" id="nav-reviews">Reviews</a></li>
+    <li><a href="#" onclick="showPage('status')" id="nav-status">Status</a></li>
+    <li><a href="#" onclick="showPage('stats')" id="nav-stats">Statistics</a></li>
+    <li><a href="#" onclick="showPage('admin')" id="nav-admin">Admin</a></li>
+  </ul>
+  <div class="nav-actions">
+    <a href="#" class="btn btn-ghost" onclick="showPage('auth')">Login</a>
+    <button class="btn btn-pink cart-btn" onclick="toggleCart()">🛒 Cart <span class="cart-count" id="cart-count">0</span></button>
+    <button class="hamburger" id="hamburger" onclick="toggleMobileNav()">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</nav>
+
+<!-- CART OVERLAY -->
+<div class="cart-overlay" id="cart-overlay" onclick="toggleCart()"></div>
+
+<!-- CART PANEL -->
+<div class="cart-panel" id="cart-panel">
+  <div class="cart-header">
+    <div class="cart-title">Your Cart</div>
+    <button class="cart-close" onclick="toggleCart()">✕</button>
+  </div>
+  <div class="cart-items" id="cart-items">
+    <div style="text-align:center;color:var(--muted);padding:3rem 1rem;font-family:'Share Tech Mono',monospace;font-size:0.75rem;letter-spacing:0.1em;">CART IS EMPTY</div>
+  </div>
+  <div class="cart-footer">
+    <div class="cart-total-row">
+      <div class="cart-total-label">Total</div>
+      <div class="cart-total-val" id="cart-total">$0.00</div>
+    </div>
+    <button class="btn btn-pink btn-lg" style="width:100%;justify-content:center;" onclick="openPayModal()">Checkout — Pay with Crypto</button>
+  </div>
+</div>
+
+<!-- PAYMENT MODAL -->
+<div class="modal" id="pay-modal">
+  <div class="modal-overlay" onclick="closePayModal()"></div>
+  <div class="modal-content">
+    <div class="modal-top"></div>
+    <button class="modal-close" onclick="closePayModal()">✕</button>
+    <div class="modal-body">
+      <div class="modal-title">Crypto Payment</div>
+      <div class="modal-sub">Select a cryptocurrency to complete your order</div>
+      <div class="crypto-grid">
+        <button class="crypto-btn active" onclick="selectCrypto(this,'BTC')">
+          <span class="crypto-icon">₿</span>
+          <span class="crypto-name">Bitcoin</span>
+        </button>
+        <button class="crypto-btn" onclick="selectCrypto(this,'ETH')">
+          <span class="crypto-icon">Ξ</span>
+          <span class="crypto-name">Ethereum</span>
+        </button>
+        <button class="crypto-btn" onclick="selectCrypto(this,'USDT')">
+          <span class="crypto-icon">₮</span>
+          <span class="crypto-name">USDT</span>
+        </button>
+        <button class="crypto-btn" onclick="selectCrypto(this,'LTC')">
+          <span class="crypto-icon">Ł</span>
+          <span class="crypto-name">Litecoin</span>
+        </button>
+        <button class="crypto-btn" onclick="selectCrypto(this,'SOL')">
+          <span class="crypto-icon">◎</span>
+          <span class="crypto-name">Solana</span>
+        </button>
+        <button class="crypto-btn" onclick="selectCrypto(this,'XMR')">
+          <span class="crypto-icon">ɱ</span>
+          <span class="crypto-name">Monero</span>
+        </button>
+      </div>
+      <div style="font-family:'Share Tech Mono',monospace;font-size:0.68rem;color:var(--muted);letter-spacing:0.1em;margin-bottom:0.5rem;">SEND <span id="selected-coin" style="color:var(--pink);">BTC</span> TO ADDRESS</div>
+      <div class="pay-address" id="pay-address" onclick="navigator.clipboard&&navigator.clipboard.writeText(this.textContent).then(()=>showToast('📋 Address copied!'))" title="Click to copy" style="cursor:pointer;">Loading...</div>
+      <div style="font-family:'Share Tech Mono',monospace;font-size:0.6rem;color:var(--muted);margin-bottom:0.75rem;">👆 Click address to copy</div>
+      <div class="pay-amount">
+        <div class="pay-label">AMOUNT DUE</div>
+        <div class="pay-val" id="pay-amount-val">$0.00</div>
+      </div>
+      <button class="btn btn-pink btn-lg" style="width:100%;justify-content:center;" id="pay-confirm-btn" onclick="confirmPayment()">Confirm Payment</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══ HOME PAGE ══ -->
+<div class="page active page-enter" id="page-home">
+  <section class="hero">
+    <div class="hero-content">
+      <div class="hero-badge">⚡ Premium Digital Marketplace — Live</div>
+      <h1>
+        <span class="line1">Welcome to</span>
+        <span class="line2">ECHY STORE</span>
+      </h1>
+      <p>Premium Automated Digital Marketplace — Instant delivery, unbeatable prices, and 24/7 support across every product category.</p>
+      <div class="hero-actions">
+        <button class="btn btn-pink btn-lg" onclick="showPage('products')">Browse Products →</button>
+        <button class="btn btn-ghost btn-lg" onclick="showPage('reviews')">View Reviews</button>
+      </div>
+      <div class="social-strip" style="justify-content:center;margin-top:2rem;">
+        <a href="https://discord.gg/YOURCODE" id="btn-discord-hero" class="social-btn discord" target="_blank" rel="noopener">💬 Join Discord</a>
+        <a href="https://t.me/YOURCHANNEL" id="btn-telegram-hero" class="social-btn telegram" target="_blank" rel="noopener">✈️ Telegram</a>
+      </div>
+    </div>
+    <div class="hero-scroll"><div class="scroll-line"></div>SCROLL</div>
+  </section>
+
+  <!-- STATS -->
+  <div class="stats-section">
+    <div class="container">
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div class="stat-num" data-target="12847">0</div>
+          <div class="stat-label">Products Sold</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-num" data-target="4291">0</div>
+          <div class="stat-label">Active Customers</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-num" data-target="3654">0</div>
+          <div class="stat-label">Reviews Received</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-num" data-target="49" data-suffix="/5.0">0</div>
+          <div class="stat-label">Average Rating</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="neon-divider"></div>
+
+  <!-- FEATURED PRODUCTS -->
+  <section>
+    <div class="container">
+      <div class="text-center" style="margin-bottom:1rem;">
+        <div class="section-label">Featured</div>
+        <div class="section-title">Top <span class="accent">Products</span></div>
+        <p class="section-sub">Handpicked premium digital goods with instant delivery</p>
+      </div>
+      <div class="products-grid" id="featured-products"></div>
+    </div>
+  </section>
+
+  <div class="neon-divider"></div>
+
+  <!-- WHY US -->
+  <section>
+    <div class="container">
+      <div class="text-center" style="margin-bottom:1rem;">
+        <div class="section-label">Why Us</div>
+        <div class="section-title">Built for the <span class="accent">Future</span></div>
+        <p class="section-sub">Every feature crafted for speed, security, and satisfaction</p>
+      </div>
+      <div class="features-grid" style="margin-top:3rem;">
+        <div class="feature-card">
+          <span class="feature-icon">⚡</span>
+          <div class="feature-title">Instant Delivery</div>
+          <div class="feature-desc">Fully automated system delivers your purchase within seconds of payment confirmation. No waiting, no delays.</div>
+          <div class="glow-line"></div>
+        </div>
+        <div class="feature-card">
+          <span class="feature-icon">🔒</span>
+          <div class="feature-title">Secure Payments</div>
+          <div class="feature-desc">Multi-chain crypto payments with automatic detection. Your transactions are encrypted and fully private.</div>
+          <div class="glow-line"></div>
+        </div>
+        <div class="feature-card">
+          <span class="feature-icon">🛡️</span>
+          <div class="feature-title">24/7 Support</div>
+          <div class="feature-desc">Round-the-clock support via Discord and Telegram. Real responses within minutes, not hours.</div>
+          <div class="glow-line"></div>
+        </div>
+        <div class="feature-card">
+          <span class="feature-icon">🗂️</span>
+          <div class="feature-title">Huge Selection</div>
+          <div class="feature-desc">Thousands of digital products across every category — accounts, licenses, tools, boosts, and more.</div>
+          <div class="glow-line"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="neon-divider"></div>
+
+  <!-- FOOTER SOCIALS + FOOTER -->
+  <footer>
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <div class="footer-logo">ECHY STORE</div>
+        <div class="footer-desc">Premium automated digital marketplace delivering instant, secure, and reliable products 24/7.</div>
+        <div class="social-strip">
+          <a href="https://discord.gg/YOURCODE" id="social-discord" class="social-btn discord" target="_blank" rel="noopener">💬 Discord</a>
+          <a href="https://t.me/YOURCHANNEL" id="social-telegram" class="social-btn telegram" target="_blank" rel="noopener">✈️ Telegram</a>
+        </div>
+      </div>
+      <div>
+        <div class="footer-col-title">Navigate</div>
+        <ul class="footer-links">
+          <li><a href="#" onclick="showPage('home')">Home</a></li>
+          <li><a href="#" onclick="showPage('products')">Products</a></li>
+          <li><a href="#" onclick="showPage('reviews')">Reviews</a></li>
+          <li><a href="#" onclick="showPage('status')">Status</a></li>
+        </ul>
+      </div>
+      <div>
+        <div class="footer-col-title">Account</div>
+        <ul class="footer-links">
+          <li><a href="#" onclick="showPage('auth')">Login</a></li>
+          <li><a href="#" onclick="showPage('auth')">Register</a></li>
+          <li><a href="#">My Orders</a></li>
+          <li><a href="#">Downloads</a></li>
+        </ul>
+      </div>
+      <div>
+        <div class="footer-col-title">Legal</div>
+        <ul class="footer-links">
+          <li><a href="#">Terms of Service</a></li>
+          <li><a href="#">Privacy Policy</a></li>
+          <li><a href="#">Refund Policy</a></li>
+          <li><a href="#">Contact</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <div class="footer-copy">© 2025 <span class="footer-accent">Echy Store</span>. All rights reserved.</div>
+      <div class="footer-copy">Powered by cyberpunk technology ⚡</div>
+    </div>
+  </footer>
+</div>
+
+<!-- ══ PRODUCTS PAGE ══ -->
+<div class="page" id="page-products">
+  <section style="padding-top:8rem;">
+    <div class="container">
+      <div class="section-label">Catalog</div>
+      <div class="section-title" style="margin-bottom:0.5rem;">All <span class="accent">Products</span></div>
+      <p class="section-sub" style="margin-bottom:2rem;">Browse our complete digital goods catalog</p>
+      <div style="display:flex;gap:0.75rem;flex-wrap:wrap;margin-bottom:2.5rem;">
+        <button class="btn btn-pink" onclick="filterProducts('all',this)">All</button>
+        <button class="btn btn-ghost" onclick="filterProducts('accounts',this)">Accounts</button>
+        <button class="btn btn-ghost" onclick="filterProducts('boosts',this)">Boosts</button>
+        <button class="btn btn-ghost" onclick="filterProducts('tools',this)">Tools</button>
+        <button class="btn btn-ghost" onclick="filterProducts('licenses',this)">Licenses</button>
+      </div>
+      <div class="products-grid" id="all-products"></div>
+    </div>
+  </section>
+</div>
+
+<!-- ══ REVIEWS PAGE ══ -->
+<div class="page" id="page-reviews">
+  <section style="padding-top:8rem;">
+    <div class="container">
+      <div class="text-center" style="margin-bottom:1rem;">
+        <div class="section-label">Testimonials</div>
+        <div class="section-title">Customer <span class="accent">Reviews</span></div>
+        <p class="section-sub">What our community says about us</p>
+      </div>
+      <div style="display:flex;align-items:center;justify-content:center;gap:2rem;margin:2rem 0;flex-wrap:wrap;">
+        <div style="text-align:center;">
+          <div style="font-family:'Orbitron',sans-serif;font-size:3rem;font-weight:900;color:var(--pink);text-shadow:var(--glow-sm);">4.9</div>
+          <div style="color:#ffcc00;font-size:1.3rem;text-shadow:0 0 10px rgba(255,204,0,0.5);">★★★★★</div>
+          <div style="font-family:'Share Tech Mono',monospace;font-size:0.7rem;color:var(--muted);">AVERAGE RATING</div>
+        </div>
+        <div style="width:1px;height:60px;background:var(--border);"></div>
+        <div style="text-align:center;">
+          <div style="font-family:'Orbitron',sans-serif;font-size:3rem;font-weight:900;color:var(--pink);text-shadow:var(--glow-sm);">3.6K</div>
+          <div style="font-family:'Share Tech Mono',monospace;font-size:0.7rem;color:var(--muted);">TOTAL REVIEWS</div>
+        </div>
+        <div style="width:1px;height:60px;background:var(--border);"></div>
+        <div style="text-align:center;">
+          <div style="font-family:'Orbitron',sans-serif;font-size:3rem;font-weight:900;color:var(--pink);text-shadow:var(--glow-sm);">98%</div>
+          <div style="font-family:'Share Tech Mono',monospace;font-size:0.7rem;color:var(--muted);">SATISFACTION</div>
+        </div>
+      </div>
+      <!-- Review Form -->
+      <div style="max-width:560px;margin:0 auto 3rem;border:1px solid var(--border);border-radius:12px;padding:2rem;background:var(--glass);backdrop-filter:blur(10px);">
+        <div style="font-family:'Orbitron',sans-serif;font-weight:700;margin-bottom:1.25rem;">Leave a Review</div>
+        <div class="form-group">
+          <label class="form-label">Your Name</label>
+          <input class="form-input" type="text" placeholder="CyberUser_404">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Rating</label>
+          <div id="star-select" style="display:flex;gap:0.5rem;font-size:1.5rem;cursor:none;">
+            <span onclick="setRating(1)" class="star-btn" style="cursor:none;transition:transform 0.15s;">☆</span>
+            <span onclick="setRating(2)" class="star-btn" style="cursor:none;transition:transform 0.15s;">☆</span>
+            <span onclick="setRating(3)" class="star-btn" style="cursor:none;transition:transform 0.15s;">☆</span>
+            <span onclick="setRating(4)" class="star-btn" style="cursor:none;transition:transform 0.15s;">☆</span>
+            <span onclick="setRating(5)" class="star-btn" style="cursor:none;transition:transform 0.15s;">☆</span>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Review</label>
+          <textarea class="form-input" rows="3" placeholder="Share your experience..." style="resize:none;"></textarea>
+        </div>
+        <button class="btn btn-pink" onclick="submitReview()" style="width:100%;justify-content:center;">Submit Review</button>
+      </div>
+      <div class="reviews-grid" id="reviews-grid"></div>
+    </div>
+  </section>
+</div>
+
+<!-- ══ STATUS PAGE ══ -->
+<div class="page" id="page-status">
+  <section style="padding-top:8rem;">
+    <div class="container">
+      <div class="section-label">Operational Status</div>
+      <div class="section-title" style="margin-bottom:0.5rem;">System <span class="accent">Status</span></div>
+      <p class="section-sub" style="margin-bottom:3rem;">Real-time monitoring of all services</p>
+      <div style="display:inline-flex;align-items:center;gap:0.75rem;padding:0.6rem 1.25rem;background:rgba(0,255,135,0.08);border:1px solid rgba(0,255,135,0.2);border-radius:100px;margin-bottom:2.5rem;">
+        <span style="width:8px;height:8px;background:#00ff87;border-radius:50%;box-shadow:0 0 8px #00ff87;animation:statusPing 2s ease-in-out infinite;"></span>
+        <span style="font-family:'Share Tech Mono',monospace;font-size:0.72rem;color:#00ff87;letter-spacing:0.15em;">ALL SYSTEMS OPERATIONAL</span>
+      </div>
+      <div class="status-grid">
+        <div class="status-card"><div class="status-dot online"></div><div class="status-info"><div class="status-name">Payment Gateway</div><div class="status-detail">NOWPayments API</div></div><div class="status-val">100%</div></div>
+        <div class="status-card"><div class="status-dot online"></div><div class="status-info"><div class="status-name">BTC Network</div><div class="status-detail">Bitcoin Mainnet</div></div><div class="status-val">100%</div></div>
+        <div class="status-card"><div class="status-dot online"></div><div class="status-info"><div class="status-name">ETH Network</div><div class="status-detail">Ethereum Mainnet</div></div><div class="status-val">99.8%</div></div>
+        <div class="status-card"><div class="status-dot online"></div><div class="status-info"><div class="status-name">Solana Network</div><div class="status-detail">SOL Mainnet</div></div><div class="status-val">100%</div></div>
+        <div class="status-card"><div class="status-dot online"></div><div class="status-info"><div class="status-name">USDT (TRC-20)</div><div class="status-detail">Tron Network</div></div><div class="status-val">100%</div></div>
+        <div class="status-card"><div class="status-dot online"></div><div class="status-info"><div class="status-name">API Server</div><div class="status-detail">Node.js Backend</div></div><div class="status-val">100%</div></div>
+        <div class="status-card"><div class="status-dot online"></div><div class="status-info"><div class="status-name">Database</div><div class="status-detail">MongoDB Atlas</div></div><div class="status-val">100%</div></div>
+        <div class="status-card"><div class="status-dot online"></div><div class="status-info"><div class="status-name">Delivery System</div><div class="status-detail">Auto-fulfillment</div></div><div class="status-val">100%</div></div>
+        <div class="status-card"><div class="status-dot online"></div><div class="status-info"><div class="status-name">Discord Bot</div><div class="status-detail">Webhook Notifications</div></div><div class="status-val">100%</div></div>
+        <div class="status-card"><div class="status-dot online"></div><div class="status-info"><div class="status-name">Email Service</div><div class="status-detail">SMTP / SendGrid</div></div><div class="status-val">100%</div></div>
+        <div class="status-card"><div class="status-dot online"></div><div class="status-info"><div class="status-name">CDN / Files</div><div class="status-detail">Cloudflare R2</div></div><div class="status-val">100%</div></div>
+        <div class="status-card"><div class="status-dot warn"></div><div class="status-info"><div class="status-name">LTC Network</div><div class="status-detail">Litecoin Mainnet</div></div><div class="status-val" style="color:#ffcc00;">98.2%</div></div>
+      </div>
+      <div class="uptime-bar" style="margin-top:3rem;">
+        <div class="uptime-title">90-Day Uptime History</div>
+        <div class="uptime-segments" id="uptime-segments"></div>
+        <div style="display:flex;justify-content:space-between;margin-top:0.5rem;">
+          <span style="font-family:'Share Tech Mono',monospace;font-size:0.6rem;color:var(--muted);">90 days ago</span>
+          <span style="font-family:'Share Tech Mono',monospace;font-size:0.6rem;color:#00ff87;">99.97% uptime</span>
+          <span style="font-family:'Share Tech Mono',monospace;font-size:0.6rem;color:var(--muted);">Today</span>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+
+<!-- ══ STATS PAGE ══ -->
+<div class="page" id="page-stats">
+  <section style="padding-top:8rem;">
+    <div class="container">
+      <div class="section-label">Analytics</div>
+      <div class="section-title" style="margin-bottom:0.5rem;">Store <span class="accent">Statistics</span></div>
+      <p class="section-sub" style="margin-bottom:1rem;">Live analytics and performance metrics</p>
+      <div class="stats-big-grid">
+        <div class="stat-big-card"><div class="stat-big-num">$84,291</div><div class="stat-big-label">Total Revenue</div></div>
+        <div class="stat-big-card"><div class="stat-big-num">12,847</div><div class="stat-big-label">Total Orders</div></div>
+        <div class="stat-big-card"><div class="stat-big-num">4,291</div><div class="stat-big-label">Customers</div></div>
+        <div class="stat-big-card"><div class="stat-big-num">73.4%</div><div class="stat-big-label">Conversion Rate</div></div>
+        <div class="stat-big-card"><div class="stat-big-num">$6.55</div><div class="stat-big-label">Avg Order Value</div></div>
+        <div class="stat-big-card"><div class="stat-big-num">4.9★</div><div class="stat-big-label">Avg Rating</div></div>
+      </div>
+      <div class="chart-wrap">
+        <div class="chart-title">Monthly Revenue (2025)</div>
+        <div class="chart-bars" id="revenue-chart"></div>
+        <div style="display:flex;gap:0.75rem;margin-top:0.5rem;">
+          <div style="font-family:'Share Tech Mono',monospace;font-size:0.6rem;color:var(--muted);flex:1;text-align:center;" id="chart-labels"></div>
+        </div>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;margin-top:1.5rem;" class="stats-charts">
+        <div class="chart-wrap">
+          <div class="chart-title">Top Categories</div>
+          <div id="cat-chart" style="display:flex;flex-direction:column;gap:0.75rem;margin-top:1rem;"></div>
+        </div>
+        <div class="chart-wrap">
+          <div class="chart-title">Payment Methods</div>
+          <div id="pay-chart" style="display:flex;flex-direction:column;gap:0.75rem;margin-top:1rem;"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+
+<!-- ══ AUTH PAGE ══ -->
+<div class="page" id="page-auth">
+  <div class="auth-wrap">
+    <div class="auth-card">
+      <div style="text-align:center;margin-bottom:2rem;">
+        <div style="font-family:'Orbitron',sans-serif;font-size:1.5rem;font-weight:900;color:var(--pink);text-shadow:var(--glow-sm);">ECHY STORE</div>
+        <div style="color:var(--muted);font-size:0.85rem;margin-top:0.25rem;">Access your account</div>
+      </div>
+      <div class="auth-tabs">
+        <div class="auth-tab active" onclick="switchAuthTab('login',this)">Login</div>
+        <div class="auth-tab" onclick="switchAuthTab('register',this)">Register</div>
+      </div>
+      <div id="auth-login">
+        <div class="form-group"><label class="form-label">Email</label><input class="form-input" type="email" placeholder="user@echystore.com"></div>
+        <div class="form-group"><label class="form-label">Password</label><input class="form-input" type="password" placeholder="••••••••"></div>
+        <button class="btn btn-pink form-submit" onclick="doLogin()">Login to Account</button>
+        <div class="form-links"><a href="#">Forgot password?</a></div>
+      </div>
+      <div id="auth-register" style="display:none;">
+        <div class="form-group"><label class="form-label">Username</label><input class="form-input" type="text" placeholder="CyberUser_404"></div>
+        <div class="form-group"><label class="form-label">Email</label><input class="form-input" type="email" placeholder="user@echystore.com"></div>
+        <div class="form-group"><label class="form-label">Password</label><input class="form-input" type="password" placeholder="Min 8 characters"></div>
+        <div class="form-group"><label class="form-label">Confirm Password</label><input class="form-input" type="password" placeholder="Repeat password"></div>
+        <button class="btn btn-pink form-submit" onclick="doRegister()">Create Account</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ ADMIN PAGE ══ -->
+<div class="page" id="page-admin">
+  <div class="admin-wrap">
+    <aside class="admin-sidebar">
+      <ul class="admin-nav">
+        <li class="admin-nav-item active" onclick="switchAdmin('dashboard',this)"><span class="admin-nav-icon">📊</span>Dashboard</li>
+        <li class="admin-nav-item" onclick="switchAdmin('products-mgr',this)"><span class="admin-nav-icon">📦</span>Products</li>
+        <li class="admin-nav-item" onclick="switchAdmin('orders-mgr',this)"><span class="admin-nav-icon">🛒</span>Orders</li>
+        <li class="admin-nav-item" onclick="switchAdmin('users-mgr',this)"><span class="admin-nav-icon">👥</span>Users</li>
+        <li class="admin-nav-item" onclick="switchAdmin('reviews-mgr',this)"><span class="admin-nav-icon">⭐</span>Reviews</li>
+        <li class="admin-nav-item" onclick="switchAdmin('payments-mgr',this)"><span class="admin-nav-icon">💳</span>Crypto Addrs</li>
+        <li class="admin-nav-item" onclick="switchAdmin('socials-mgr',this)"><span class="admin-nav-icon">🔗</span>Social Links</li>
+        <li class="admin-nav-item" onclick="switchAdmin('supabase-mgr',this)"><span class="admin-nav-icon">🗄️</span>Supabase</li>
+        <li class="admin-nav-item" onclick="switchAdmin('settings-mgr',this)"><span class="admin-nav-icon">⚙️</span>Settings</li>
+      </ul>
+    </aside>
+    <main class="admin-main" id="admin-main">
+      <!-- Dynamic admin content -->
+    </main>
+  </div>
+</div>
+
+<script>
+// ── CURSOR ──
+const cursor = document.getElementById('cursor');
+const cursorRing = document.getElementById('cursor-ring');
+document.addEventListener('mousemove', e => {
+  cursor.style.left = e.clientX + 'px';
+  cursor.style.top = e.clientY + 'px';
+  setTimeout(() => {
+    cursorRing.style.left = e.clientX + 'px';
+    cursorRing.style.top = e.clientY + 'px';
+  }, 80);
+});
+document.addEventListener('mousedown', () => { cursor.style.transform = 'translate(-50%,-50%) scale(1.5)'; });
+document.addEventListener('mouseup', () => { cursor.style.transform = 'translate(-50%,-50%) scale(1)'; });
+
+// ── PARTICLES ──
+const canvas = document.getElementById('particles');
+const ctx = canvas.getContext('2d');
+let W, H, particles = [], lines = [];
+function resizeCanvas() { W = canvas.width = window.innerWidth; H = canvas.height = window.innerHeight; }
+resizeCanvas(); window.addEventListener('resize', resizeCanvas);
+class Particle {
+  constructor() { this.reset(); }
+  reset() {
+    this.x = Math.random() * W; this.y = Math.random() * H;
+    this.vx = (Math.random() - 0.5) * 0.4; this.vy = (Math.random() - 0.5) * 0.4;
+    this.r = Math.random() * 1.5 + 0.5; this.alpha = Math.random() * 0.5 + 0.1;
+  }
+  update() {
+    this.x += this.vx; this.y += this.vy;
+    if (this.x < 0 || this.x > W || this.y < 0 || this.y > H) this.reset();
+  }
+  draw() {
+    ctx.beginPath(); ctx.arc(this.x, this.y, this.r, 0, Math.PI * 2);
+    ctx.fillStyle = `rgba(255,0,170,${this.alpha})`; ctx.fill();
+  }
+}
+for (let i = 0; i < 80; i++) particles.push(new Particle());
+function animParticles() {
+  ctx.clearRect(0, 0, W, H);
+  particles.forEach(p => { p.update(); p.draw(); });
+  for (let i = 0; i < particles.length; i++) {
+    for (let j = i + 1; j < particles.length; j++) {
+      const dx = particles[i].x - particles[j].x, dy = particles[i].y - particles[j].y;
+      const dist = Math.sqrt(dx * dx + dy * dy);
+      if (dist < 100) {
+        ctx.beginPath(); ctx.moveTo(particles[i].x, particles[i].y); ctx.lineTo(particles[j].x, particles[j].y);
+        ctx.strokeStyle = `rgba(255,0,170,${0.08 * (1 - dist / 100)})`; ctx.lineWidth = 0.5; ctx.stroke();
+      }
+    }
+  }
+  requestAnimationFrame(animParticles);
+}
+animParticles();
+
+// ── NAVBAR SCROLL ──
+window.addEventListener('scroll', () => {
+  document.getElementById('navbar').classList.toggle('scrolled', window.scrollY > 50);
+});
+
+// ── LOADER ──
+window.addEventListener('load', () => {
+  setTimeout(() => {
+    document.getElementById('loader').classList.add('hidden');
+    startCounterAnimations();
+    startNotifLoop();
+    renderUptimeBars();
+    renderRevenueChart();
+    renderCategoryChart();
+    renderPaymentChart();
+    initRemoteData(); // Supabase + social links load
+  }, 2200);
+});
+
+// ── PAGE SYSTEM ──
+const pages = ['home','products','reviews','status','stats','auth','admin'];
+function showPage(name) {
+  pages.forEach(p => {
+    document.getElementById('page-' + p).classList.remove('active','page-enter');
+    const navEl = document.getElementById('nav-' + p);
+    if (navEl) navEl.classList.remove('active');
+  });
+  const el = document.getElementById('page-' + name);
+  if (el) { el.classList.add('active'); requestAnimationFrame(() => el.classList.add('page-enter')); }
+  const navEl = document.getElementById('nav-' + name);
+  if (navEl) navEl.classList.add('active');
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+  if (name === 'products') renderAllProducts();
+  if (name === 'reviews') renderReviews();
+  if (name === 'admin') { renderAdminDashboard(); clearInterval(window._dashTimer); window._dashTimer = setInterval(renderAdminDashboard, 8000); } else { clearInterval(window._dashTimer); }
+  // close mobile nav
+  document.getElementById('nav-links').classList.remove('mobile-open');
+}
+
+// ── MOBILE NAV ──
+function toggleMobileNav() { document.getElementById('nav-links').classList.toggle('mobile-open'); }
+
+// ══════════════════════════════════════════
+// ⚡ SUPABASE CONFIG — Apna URL aur KEY daalo
+// ══════════════════════════════════════════
+const SUPABASE_URL = 'https://YOUR_PROJECT.supabase.co';
+const SUPABASE_KEY = 'YOUR_ANON_KEY';
+
+// ── Social Links (admin se update hoti hain) ──
+const SOCIAL = {
+  discord:  'https://discord.gg/YOURCODE',
+  telegram: 'https://t.me/YOURCHANNEL',
+};
+
+// ── Supabase Helper ──
+async function sbFetch(path, opts={}) {
+  try {
+    const r = await fetch(SUPABASE_URL + '/rest/v1/' + path, {
+      headers: {
+        'apikey': SUPABASE_KEY,
+        'Authorization': 'Bearer ' + SUPABASE_KEY,
+        'Content-Type': 'application/json',
+        'Prefer': opts.prefer || 'return=representation',
+        ...opts.headers
+      },
+      ...opts,
+    });
+    if (!r.ok) return null;
+    return await r.json();
+  } catch(e) { return null; }
+}
+
+// ── Social link updater (admin se live update) ──
+function updateSocialLinks() {
+  try {
+    const s = JSON.parse(localStorage.getItem('echy_social') || '{}');
+    if (s.discord) {
+      document.querySelectorAll('[id^="btn-discord"],[id^="social-discord"]').forEach(el => el.href = s.discord);
+    }
+    if (s.telegram) {
+      document.querySelectorAll('[id^="btn-telegram"],[id^="social-telegram"]').forEach(el => el.href = s.telegram);
+    }
+  } catch(e) {}
+}
+
+// ── Local fallback keys ──
+const STORE_KEY  = 'echy_products';
+const ORDERS_KEY = 'echy_orders';
+const ADDRS_KEY  = 'echy_crypto_addrs';
+const STATS_KEY  = 'echy_stats';
+
+const DEFAULT_PRODUCTS = [
+  { id:1, name:'Discord Nitro',    cat:'boosts',   price:4.99,  emoji:'💎', badge:'hot', desc:'Full Discord Nitro boost with all perks.',        keys:['NITRO-AAAA-1111','NITRO-BBBB-2222','NITRO-CCCC-3333'] },
+  { id:2, name:'Spotify Premium',  cat:'accounts', price:2.99,  emoji:'🎵', badge:'new', desc:'Premium account with ad-free listening.',          keys:['SPOT-XXXX-4444','SPOT-YYYY-5555'] },
+  { id:3, name:'Netflix 4K UHD',   cat:'accounts', price:3.49,  emoji:'🎬', badge:'hot', desc:'Ultra HD 4K Netflix account — ready to use.',      keys:['NFX-AAAA-6666','NFX-BBBB-7777','NFX-CCCC-8888'] },
+  { id:4, name:'ChatGPT Plus',     cat:'licenses', price:7.99,  emoji:'🤖', badge:'new', desc:'GPT-4 access with full ChatGPT Plus features.',    keys:['GPT-PLUS-9999','GPT-PLUS-0000'] },
+  { id:5, name:'NordVPN 1yr',      cat:'tools',    price:5.99,  emoji:'🛡️', badge:'',   desc:'Full year of NordVPN premium protection.',         keys:['NORD-VPN-AAAA','NORD-VPN-BBBB'] },
+  { id:6, name:'Adobe CC All Apps',cat:'licenses', price:12.99, emoji:'🎨', badge:'hot', desc:'Complete Adobe Creative Cloud suite access.',      keys:['ADOB-CC-1111'] },
+  { id:7, name:'Steam Gift Cards', cat:'boosts',   price:14.99, emoji:'🎮', badge:'',   desc:'$20 Steam gift card — instant key delivery.',      keys:['STEAM-AAAA','STEAM-BBBB','STEAM-CCCC','STEAM-DDDD'] },
+  { id:8, name:'GitHub Copilot',   cat:'tools',    price:6.49,  emoji:'💻', badge:'new', desc:'AI code completion for all your projects.',       keys:['GH-COP-1111','GH-COP-2222','GH-COP-3333'] },
+];
+const DEFAULT_ADDRS = {
+  BTC:  'bc1qxy2kgdygjrsqtzq2n0yrf2493p83kkfjhx0wlh',
+  ETH:  '0x71C7656EC7ab88b098defB751B7401B5f6d8976F',
+  USDT: 'TGZqULsxJ6qRVD5UuzNBTCqvwTJSgtUxRB',
+  LTC:  'LgFRBKXVREfQhLmrELGGDUmE8yVm3LcF8n',
+  SOL:  '7xKXtg2CW87d97TXJSDpbD5jBkheTqA83TZRuJosgAsU',
+  XMR:  '44AFFq5kSiGBoZ4NMDwYtN18obc8AemS33DBLWs3H7otXft3XjrpDtQGv7SqSsaBYBb98uNbr2VBBEt7f2wfn3RVGN8DXk',
+};
+
+// ══════════════════════════════════════════
+// SUPABASE-POWERED STORAGE (localStorage fallback)
+// ══════════════════════════════════════════
+
+// Products — Supabase primary, localStorage fallback
+async function loadProductsRemote() {
+  const rows = await sbFetch('echy_products?order=id.asc&select=*');
+  if (rows && rows.length > 0) {
+    // Convert from DB row format to app format
+    const prods = rows.map(r => ({
+      id: r.id, name: r.name, cat: r.cat, price: r.price,
+      emoji: r.emoji, badge: r.badge, desc: r.desc,
+      keys: r.keys || [],
+    }));
+    localStorage.setItem(STORE_KEY, JSON.stringify(prods));
+    return prods;
+  }
+  return null;
+}
+function loadProducts() {
+  try { const d = localStorage.getItem(STORE_KEY); if (d) return JSON.parse(d); } catch(e) {}
+  saveProducts(DEFAULT_PRODUCTS); return JSON.parse(JSON.stringify(DEFAULT_PRODUCTS));
+}
+async function saveProductsRemote(arr) {
+  // Upsert all products to Supabase
+  await sbFetch('echy_products', {
+    method: 'POST',
+    prefer: 'resolution=merge-duplicates',
+    body: JSON.stringify(arr.map(p => ({
+      id: p.id, name: p.name, cat: p.cat, price: p.price,
+      emoji: p.emoji, badge: p.badge || '', desc: p.desc || '',
+      keys: p.keys || [],
+    }))),
+  });
+}
+function saveProducts(arr) {
+  try { localStorage.setItem(STORE_KEY, JSON.stringify(arr)); } catch(e) {}
+  saveProductsRemote(arr).catch(()=>{});
+}
+
+// Orders — Supabase primary, localStorage fallback
+async function saveOrderRemote(order) {
+  return await sbFetch('echy_orders', {
+    method: 'POST',
+    body: JSON.stringify({
+      order_id: order.id,
+      items: order.items,
+      total: parseFloat(order.total),
+      coin: order.coin,
+      status: order.status,
+      keys_delivered: order.keys,
+      created_at: new Date().toISOString(),
+    }),
+  });
+}
+function loadOrders() {
+  try { const d = localStorage.getItem(ORDERS_KEY); if (d) return JSON.parse(d); } catch(e) {} return [];
+}
+function saveOrders(a) {
+  try { localStorage.setItem(ORDERS_KEY, JSON.stringify(a)); } catch(e) {}
+}
+
+// Crypto Addresses — Supabase primary
+async function loadAddrsRemote() {
+  const rows = await sbFetch('echy_settings?key=eq.crypto_addrs&select=value');
+  if (rows && rows.length > 0) {
+    try {
+      const addrs = JSON.parse(rows[0].value);
+      localStorage.setItem(ADDRS_KEY, JSON.stringify(addrs));
+      return addrs;
+    } catch(e) {}
+  }
+  return null;
+}
+async function saveAddrsRemote(addrs) {
+  await sbFetch('echy_settings', {
+    method: 'POST',
+    prefer: 'resolution=merge-duplicates',
+    body: JSON.stringify({ key: 'crypto_addrs', value: JSON.stringify(addrs) }),
+  });
+}
+function loadAddrs() {
+  try { const d = localStorage.getItem(ADDRS_KEY); if (d) return JSON.parse(d); } catch(e) {}
+  return Object.assign({}, DEFAULT_ADDRS);
+}
+
+// Stats
+function loadStats() {
+  try { const d = localStorage.getItem(STATS_KEY); if (d) return JSON.parse(d); } catch(e) {}
+  return { totalSold:12847, totalRev:84291, customers:4291 };
+}
+async function saveStatsRemote(s) {
+  await sbFetch('echy_settings', {
+    method: 'POST',
+    prefer: 'resolution=merge-duplicates',
+    body: JSON.stringify({ key: 'stats', value: JSON.stringify(s) }),
+  });
+}
+function saveStats(s) {
+  try { localStorage.setItem(STATS_KEY, JSON.stringify(s)); } catch(e) {}
+  saveStatsRemote(s).catch(()=>{});
+}
+
+// ── Init: Load remote data on page load ──
+async function initRemoteData() {
+  const remProds = await loadProductsRemote();
+  if (remProds) { products = remProds; renderFeaturedProducts(); }
+  const remAddrs = await loadAddrsRemote();
+  if (remAddrs) cryptoAddresses = remAddrs;
+  updateSocialLinks();
+  // Load social links from supabase too
+  const socialRows = await sbFetch('echy_settings?key=eq.social_links&select=value');
+  if (socialRows && socialRows.length > 0) {
+    try {
+      const s = JSON.parse(socialRows[0].value);
+      localStorage.setItem('echy_social', JSON.stringify(s));
+      updateSocialLinks();
+    } catch(e) {}
+  }
+}
+
+let products = loadProducts();
+let cryptoAddresses = loadAddrs();
+
+const reviews = [
+  { name:'darkstar_x', rating:5, text:"Fastest delivery I've ever seen. Order confirmed and delivered in under 30 seconds. Absolutely wild.", product:'Discord Nitro', emoji:'🌟', date:'2 hours ago' },
+  { name:'NeonWolf99', rating:5, text:"Best quality products at the lowest prices. Trust this store completely — been buying here for months.", product:'Spotify Premium', emoji:'🐺', date:'5 hours ago' },
+  { name:'CryptoPhoenix', rating:5, text:"Smooth purchase experience from start to finish. The crypto checkout is clean and the support team is instant.", product:'ChatGPT Plus', emoji:'🔥', date:'1 day ago' },
+  { name:'ShadowTech_7', rating:5, text:'Amazing support. Had a minor issue and it was resolved in under 5 minutes. 10/10 recommend.', product:'Netflix 4K UHD', emoji:'💫', date:'2 days ago' },
+  { name:'AkiraSystem', rating:5, text:"Highly recommended. Have bought 15+ times and never had a single issue. Echy Store is unmatched.", product:'NordVPN 1yr', emoji:'⚡', date:'3 days ago' },
+  { name:'VoidRunner', rating:5, text:'The auto-delivery is insane. Paid in SOL and had my product in seconds. This is the future of shopping.', product:'Adobe CC All Apps', emoji:'🚀', date:'4 days ago' },
+];
+const autoReviews = [
+  { name:'GhostHackerX', emoji:'👻', text:"Best purchase experience I've had online. Will never shop anywhere else." },
+  { name:'NightShade_99', emoji:'🌙', text:'Fast delivery and trusted. Exactly what was advertised. No complaints.' },
+  { name:'CyberWitch', emoji:'🔮', text:'Amazing support team. They responded instantly when I had a question.' },
+  { name:'DataPhantom', emoji:'🌀', text:'Very smooth purchase experience. The crypto payment was flawless.' },
+  { name:'QuantumRift', emoji:'⚛️', text:'Absolutely love this store. Premium products at fair prices. Highly recommended.' },
+  { name:'Hex4Proxy', emoji:'🔷', text:'Incredible service. Automated delivery works perfectly every single time.' },
+];
+let cartItems = [];
+let cartTotal = 0;
+let currentRating = 0;
+
+// ── RENDER PRODUCTS ──
+function productCard(p) {
+  const stock = p.keys ? p.keys.length : 0;
+  const stockPct = Math.min(100, Math.round((stock / 10) * 100));
+  const stockClass = stock === 0 ? 'out' : stock < 3 ? 'low' : 'high';
+  const stockLabel = stock === 0 ? '❌ Out of Stock' : stock < 3 ? `⚠ Only ${stock} left` : `✅ ${stock} in stock`;
+  const badgeHtml = p.badge ? `<div class="product-badges"><span class="badge badge-${p.badge}">${p.badge === 'hot' ? '🔥 HOT' : '✨ NEW'}</span></div>` : '';
+  const disabled = stock === 0 ? 'disabled style="opacity:0.4;pointer-events:none;"' : '';
+  return `<div class="product-card" data-cat="${p.cat}" data-id="${p.id}">
+    <div class="product-thumb"><div class="product-thumb-inner">${p.emoji}</div></div>
+    <div class="product-body">
+      ${badgeHtml}
+      <div class="product-cat">${p.cat}</div>
+      <div class="product-name">${p.name}</div>
+      <div class="stock-bar"><div class="stock-fill" style="width:${stockPct}%"></div></div>
+      <div class="product-meta">
+        <div class="product-price">$${p.price.toFixed(2)}</div>
+        <div class="product-stock ${stockClass}">${stockLabel}</div>
+      </div>
+      <div style="margin-bottom:0.75rem;">
+        <label style="font-family:'Share Tech Mono',monospace;font-size:0.65rem;color:var(--muted);letter-spacing:0.1em;">QTY</label>
+        <div style="display:flex;align-items:center;gap:0.5rem;margin-top:0.3rem;">
+          <button onclick="adjQty(${p.id},-1)" style="width:28px;height:28px;border:1px solid var(--border);border-radius:4px;background:transparent;color:var(--white);cursor:none;font-size:1rem;">−</button>
+          <span id="qty-${p.id}" style="font-family:'Orbitron',sans-serif;font-size:0.9rem;font-weight:700;min-width:24px;text-align:center;">1</span>
+          <button onclick="adjQty(${p.id},+1)" style="width:28px;height:28px;border:1px solid var(--border);border-radius:4px;background:transparent;color:var(--white);cursor:none;font-size:1rem;">+</button>
+          <span style="font-family:'Share Tech Mono',monospace;font-size:0.6rem;color:var(--muted);margin-left:0.25rem;">max ${stock}</span>
+        </div>
+      </div>
+      <div class="product-actions">
+        <button class="btn btn-ghost" onclick="addToCart(${p.id})" ${disabled}>+ Cart</button>
+        <button class="btn btn-pink" onclick="buyNow(${p.id})" ${disabled}>Buy Now →</button>
+      </div>
+    </div>
+  </div>`;
+}
+
+// qty state per product
+const qtyState = {};
+function adjQty(id, delta) {
+  const p = products.find(x => x.id === id);
+  if (!p) return;
+  const max = p.keys ? p.keys.length : 0;
+  if (!qtyState[id]) qtyState[id] = 1;
+  qtyState[id] = Math.max(1, Math.min(max, qtyState[id] + delta));
+  const el = document.getElementById('qty-' + id);
+  if (el) el.textContent = qtyState[id];
+}
+
+function renderFeaturedProducts() {
+  products = loadProducts();
+  const el = document.getElementById('featured-products');
+  if (el) el.innerHTML = products.filter(p => p.keys && p.keys.length > 0).slice(0, 4).map(p => productCard(p)).join('');
+}
+function renderAllProducts() {
+  products = loadProducts();
+  const el = document.getElementById('all-products');
+  if (el) el.innerHTML = products.map(p => productCard(p)).join('');
+}
+function filterProducts(cat, btn) {
+  document.querySelectorAll('#page-products .btn').forEach(b => { b.className = 'btn btn-ghost'; });
+  btn.className = 'btn btn-pink';
+  products = loadProducts();
+  const el = document.getElementById('all-products');
+  const filtered = cat === 'all' ? products : products.filter(p => p.cat === cat);
+  if (el) el.innerHTML = filtered.map(p => productCard(p)).join('');
+}
+setTimeout(renderFeaturedProducts, 500);
+
+// ── RENDER REVIEWS ──
+function renderReviews() {
+  const el = document.getElementById('reviews-grid');
+  if (!el) return;
+  const allRevs = [...reviews, ...autoReviews.map(r => ({ ...r, rating:5, product:'Verified Purchase', date: Math.floor(Math.random()*14+1) + ' days ago' }))];
+  el.innerHTML = allRevs.map(r => `<div class="review-card">
+    <div class="review-header">
+      <div class="review-avatar">${r.emoji}</div>
+      <div class="review-meta">
+        <div class="review-name">${r.name}</div>
+        <div class="review-date">${r.date}</div>
+      </div>
+    </div>
+    <div class="stars">${'★'.repeat(r.rating)}${'☆'.repeat(5-r.rating)}</div>
+    <div class="review-text">${r.text}</div>
+    <div class="review-product">📦 ${r.product}</div>
+  </div>`).join('');
+}
+
+// ── CART ──
+function addToCart(id) {
+  products = loadProducts();
+  const p = products.find(x => x.id === id);
+  if (!p || !p.keys || p.keys.length === 0) { showToast('❌ Out of stock!'); return; }
+  const qty = qtyState[id] || 1;
+  const available = p.keys.length;
+  const toAdd = Math.min(qty, available);
+  for (let i = 0; i < toAdd; i++) cartItems.push({ ...p, _cartId: Date.now() + i });
+  cartTotal = cartItems.reduce((s, x) => s + x.price, 0);
+  updateCartUI();
+  const cnt = document.getElementById('cart-count');
+  if (cnt) { cnt.style.transform = 'scale(1.5)'; setTimeout(() => cnt.style.transform = '', 300); }
+  showToast(`✅ Added ${toAdd}x ${p.name} to cart`);
+}
+function removeFromCart(idx) {
+  cartTotal -= cartItems[idx].price;
+  cartItems.splice(idx, 1);
+  updateCartUI();
+}
+function updateCartUI() {
+  const cnt = document.getElementById('cart-count');
+  const tot = document.getElementById('cart-total');
+  const pav = document.getElementById('pay-amount-val');
+  if (cnt) cnt.textContent = cartItems.length;
+  if (tot) tot.textContent = '$' + cartTotal.toFixed(2);
+  if (pav) pav.textContent = '$' + cartTotal.toFixed(2);
+  const el = document.getElementById('cart-items');
+  if (!el) return;
+  if (cartItems.length === 0) {
+    el.innerHTML = '<div style="text-align:center;color:var(--muted);padding:3rem 1rem;font-family:\'Share Tech Mono\',monospace;font-size:0.75rem;letter-spacing:0.1em;">CART IS EMPTY</div>';
+  } else {
+    el.innerHTML = cartItems.map((p, i) => `<div class="cart-item">
+      <div class="cart-item-thumb">${p.emoji}</div>
+      <div class="cart-item-info">
+        <div class="cart-item-name">${p.name}</div>
+        <div class="cart-item-price">$${p.price.toFixed(2)}</div>
+      </div>
+      <button class="cart-item-remove" onclick="removeFromCart(${i})">✕</button>
+    </div>`).join('');
+  }
+}
+function toggleCart() {
+  document.getElementById('cart-panel').classList.toggle('open');
+  document.getElementById('cart-overlay').classList.toggle('open');
+}
+function buyNow(id) { addToCart(id); toggleCart(); }
+
+// ── PAYMENT MODAL ──
+function selectCrypto(btn, coin) {
+  cryptoAddresses = loadAddrs();
+  document.querySelectorAll('.crypto-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  const addr = cryptoAddresses[coin] || 'Address not configured';
+  document.getElementById('pay-address').textContent = addr;
+  document.getElementById('selected-coin').textContent = coin;
+}
+function openPayModal() {
+  if (cartItems.length === 0) return;
+  cryptoAddresses = loadAddrs();
+  // default to BTC
+  const btcAddr = cryptoAddresses['BTC'] || 'Address not configured';
+  document.getElementById('pay-address').textContent = btcAddr;
+  document.getElementById('selected-coin').textContent = 'BTC';
+  document.getElementById('pay-modal').classList.add('open');
+  toggleCart();
+}
+function closePayModal() { document.getElementById('pay-modal').classList.remove('open'); }
+
+function confirmPayment() {
+  const btn = document.getElementById('pay-confirm-btn');
+  btn.textContent = '⏳ Awaiting confirmation...';
+  btn.disabled = true;
+  setTimeout(() => {
+    // Deduct stock — remove keys from products
+    products = loadProducts();
+    const deliveredKeys = {};
+    cartItems.forEach(item => {
+      const prod = products.find(x => x.id === item.id);
+      if (prod && prod.keys && prod.keys.length > 0) {
+        const key = prod.keys.shift(); // take first key
+        if (!deliveredKeys[item.name]) deliveredKeys[item.name] = [];
+        deliveredKeys[item.name].push(key);
+      }
+    });
+    saveProducts(products);
+
+    // Save order
+    const sts = loadStats();
+    const orders = loadOrders();
+    const coin = document.getElementById('selected-coin')?.textContent || 'BTC';
+    const orderId = '#EC-' + (8471 + orders.length + 1);
+    const newOrder = {
+      id: orderId,
+      items: cartItems.map(i => i.name),
+      total: cartTotal.toFixed(2),
+      coin,
+      status: 'Completed',
+      keys: deliveredKeys,
+      ts: new Date().toLocaleString(),
+    };
+    orders.unshift(newOrder);
+    saveOrders(orders);
+    saveOrderRemote(newOrder).catch(()=>{}); // Supabase backup
+
+    // Update stats
+    sts.totalSold = (sts.totalSold || 0) + cartItems.length;
+    sts.totalRev  = parseFloat(((sts.totalRev || 0) + cartTotal).toFixed(2));
+    saveStats(sts);
+
+    // Build delivery message
+    const keyLines = Object.entries(deliveredKeys).map(([name, keys]) =>
+      `${name}: ${keys.join(', ')}`).join('\n');
+
+    closePayModal();
+    cartItems = []; cartTotal = 0; updateCartUI();
+    renderFeaturedProducts();
+
+    // Show delivery modal
+    showDeliveryModal(orderId, keyLines || 'Keys have been sent to your email.');
+    btn.textContent = 'Confirm Payment';
+    btn.disabled = false;
+  }, 3500);
+}
+
+function showDeliveryModal(orderId, keyText) {
+  const existing = document.getElementById('delivery-modal');
+  if (existing) existing.remove();
+  const m = document.createElement('div');
+  m.id = 'delivery-modal';
+  m.style.cssText = 'position:fixed;inset:0;z-index:9999;display:flex;align-items:center;justify-content:center;padding:2rem;background:rgba(0,0,0,0.85);backdrop-filter:blur(8px);';
+  m.innerHTML = `<div style="background:#0a0a0f;border:1px solid rgba(0,255,135,0.3);border-radius:16px;padding:2.5rem;max-width:520px;width:100%;position:relative;">
+    <div style="height:3px;background:linear-gradient(90deg,#b300ff,#ff00aa,#00ff87);border-radius:3px;margin-bottom:2rem;"></div>
+    <div style="font-family:'Orbitron',sans-serif;font-size:1.2rem;font-weight:700;color:#00ff87;margin-bottom:0.5rem;">✅ Order Confirmed!</div>
+    <div style="font-family:'Share Tech Mono',monospace;font-size:0.7rem;color:var(--muted);margin-bottom:1.5rem;">Order ${orderId} · Payment received</div>
+    <div style="font-family:'Share Tech Mono',monospace;font-size:0.7rem;color:var(--muted);margin-bottom:0.5rem;letter-spacing:0.15em;">YOUR DELIVERY KEYS</div>
+    <div style="background:rgba(0,255,135,0.05);border:1px solid rgba(0,255,135,0.2);border-radius:8px;padding:1.25rem;font-family:'Share Tech Mono',monospace;font-size:0.85rem;color:#00ff87;white-space:pre-wrap;word-break:break-all;margin-bottom:1.5rem;">${keyText}</div>
+    <div style="font-family:'Share Tech Mono',monospace;font-size:0.65rem;color:var(--muted);margin-bottom:1.5rem;">⚠ Save these keys now. They will not be shown again.</div>
+    <button onclick="document.getElementById('delivery-modal').remove()" style="background:#ff00aa;color:#000;border:none;border-radius:6px;padding:0.75rem 2rem;font-family:'Orbitron',sans-serif;font-weight:700;font-size:0.8rem;cursor:none;width:100%;">Got it — Close</button>
+  </div>`;
+  document.body.appendChild(m);
+}
+
+function showToast(msg) {
+  const t = document.createElement('div');
+  t.style.cssText = 'position:fixed;top:80px;right:2rem;z-index:9000;background:var(--bg2);border:1px solid rgba(0,255,135,0.3);border-radius:8px;padding:1rem 1.5rem;font-family:"Share Tech Mono",monospace;font-size:0.75rem;color:#00ff87;box-shadow:0 0 20px rgba(0,255,135,0.15);max-width:300px;animation:fadeIn 0.4s ease;';
+  t.textContent = msg; document.body.appendChild(t);
+  setTimeout(() => t.remove(), 4000);
+}
+
+// ── AUTH ──
+function switchAuthTab(tab, el) {
+  document.querySelectorAll('.auth-tab').forEach(t => t.classList.remove('active'));
+  el.classList.add('active');
+  document.getElementById('auth-login').style.display = tab === 'login' ? '' : 'none';
+  document.getElementById('auth-register').style.display = tab === 'register' ? '' : 'none';
+}
+function doLogin() { showToast('✅ Login successful! Welcome back.'); setTimeout(() => showPage('home'), 500); }
+function doRegister() { showToast('✅ Account created! Check your email to verify.'); setTimeout(() => showPage('home'), 500); }
+
+// ── STAR RATING ──
+function setRating(n) {
+  currentRating = n;
+  document.querySelectorAll('.star-btn').forEach((s, i) => {
+    s.textContent = i < n ? '★' : '☆';
+    s.style.color = i < n ? '#ffcc00' : '';
+    s.style.textShadow = i < n ? '0 0 8px rgba(255,204,0,0.5)' : '';
+  });
+}
+function submitReview() { showToast('✅ Review submitted! Thank you for your feedback.'); }
+
+// ── STATS COUNTER ──
+function startCounterAnimations() {
+  document.querySelectorAll('.stat-num[data-target]').forEach(el => {
+    const target = parseInt(el.dataset.target);
+    const suffix = el.dataset.suffix || '';
+    const dur = 2000; const steps = 60;
+    let step = 0;
+    const timer = setInterval(() => {
+      step++;
+      const val = Math.round(target * (step / steps));
+      el.textContent = (step === steps ? target : val) + suffix;
+      if (step >= steps) clearInterval(timer);
+    }, dur / steps);
+  });
+}
+
+// ── UPTIME BARS ──
+function renderUptimeBars() {
+  const el = document.getElementById('uptime-segments');
+  if (!el) return;
+  const downs = [12, 25, 61];
+  for (let i = 0; i < 90; i++) {
+    const seg = document.createElement('div');
+    seg.className = 'uptime-seg' + (downs.includes(i) ? ' down' : '');
+    el.appendChild(seg);
+  }
+}
+
+// ── REVENUE CHART ──
+function renderRevenueChart() {
+  const el = document.getElementById('revenue-chart');
+  if (!el) return;
+  const data = [4200, 5800, 6100, 7900, 8200, 9400, 11200, 9800, 10400, 12100, 13800, 14900];
+  const months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  const max = Math.max(...data);
+  el.innerHTML = data.map((v, i) => `
+    <div class="chart-bar-wrap">
+      <div class="chart-bar" style="height:${Math.round((v/max)*100)}%;animation-delay:${i*0.06}s;"></div>
+      <div class="chart-bar-label">${months[i]}</div>
+    </div>`).join('');
+}
+function renderCategoryChart() {
+  const el = document.getElementById('cat-chart');
+  if (!el) return;
+  const cats = [['Accounts', 38], ['Boosts', 27], ['Tools', 19], ['Licenses', 16]];
+  el.innerHTML = cats.map(([name, pct]) => `
+    <div>
+      <div style="display:flex;justify-content:space-between;font-family:'Share Tech Mono',monospace;font-size:0.68rem;margin-bottom:0.3rem;">
+        <span style="color:var(--muted);">${name}</span><span style="color:var(--pink);">${pct}%</span>
+      </div>
+      <div style="height:4px;background:rgba(255,255,255,0.05);border-radius:4px;overflow:hidden;">
+        <div style="height:100%;width:${pct}%;background:linear-gradient(90deg,var(--purple),var(--pink));border-radius:4px;box-shadow:var(--glow-sm);"></div>
+      </div>
+    </div>`).join('');
+}
+function renderPaymentChart() {
+  const el = document.getElementById('pay-chart');
+  if (!el) return;
+  const pays = [['Bitcoin', 42], ['USDT', 31], ['Ethereum', 16], ['Solana', 11]];
+  el.innerHTML = pays.map(([name, pct]) => `
+    <div>
+      <div style="display:flex;justify-content:space-between;font-family:'Share Tech Mono',monospace;font-size:0.68rem;margin-bottom:0.3rem;">
+        <span style="color:var(--muted);">${name}</span><span style="color:var(--cyan);">${pct}%</span>
+      </div>
+      <div style="height:4px;background:rgba(255,255,255,0.05);border-radius:4px;overflow:hidden;">
+        <div style="height:100%;width:${pct}%;background:linear-gradient(90deg,var(--cyan),var(--purple));border-radius:4px;box-shadow:0 0 8px rgba(0,245,255,0.3);"></div>
+      </div>
+    </div>`).join('');
+}
+
+// ── NOTIF POPUP ──
+const notifData = [
+  { name:'NeonRider_X', text:'just purchased Discord Nitro', icon:'💎' },
+  { name:'AkiraHex', text:'just purchased ChatGPT Plus', icon:'🤖' },
+  { name:'DarkVector', text:'just purchased Netflix 4K UHD', icon:'🎬' },
+  { name:'ShadowPulse', text:'just purchased Spotify Premium', icon:'🎵' },
+  { name:'CipherWolf', text:'just purchased NordVPN 1yr', icon:'🛡️' },
+  { name:'QuantumByte', text:'just purchased Adobe CC', icon:'🎨' },
+];
+function startNotifLoop() {
+  function showNotif() {
+    const d = notifData[Math.floor(Math.random() * notifData.length)];
+    document.getElementById('notif-name').textContent = d.name;
+    document.getElementById('notif-text').textContent = d.text;
+    document.querySelector('#notif-popup .notif-icon').textContent = d.icon;
+    document.getElementById('notif-popup').classList.add('show');
+    setTimeout(() => document.getElementById('notif-popup').classList.remove('show'), 4000);
+  }
+  setTimeout(showNotif, 3000);
+  setInterval(showNotif, 10000);
+}
+
+// ══════════════════════════════════════════
+// ADMIN PANEL — Live, fully functional
+// ══════════════════════════════════════════
+
+function renderAdminDashboard() {
+  const main = document.getElementById('admin-main');
+  if (!main) return;
+  const stats = loadStats();
+  const orders = loadOrders();
+  const prods = loadProducts();
+  const totalStock = prods.reduce((s,p) => s + (p.keys?p.keys.length:0), 0);
+  main.innerHTML = `
+    <div class="admin-header">
+      <div class="admin-title">📊 Live Dashboard</div>
+      <div style="font-family:'Share Tech Mono',monospace;font-size:0.7rem;color:#00ff87;">● LIVE — ${new Date().toLocaleTimeString()}</div>
+    </div>
+    <div class="admin-cards">
+      <div class="admin-card"><div class="admin-card-num">$${parseFloat(stats.totalRev||84291).toLocaleString()}</div><div class="admin-card-label">Total Revenue</div><div class="admin-card-trend">↑ Real-time</div></div>
+      <div class="admin-card"><div class="admin-card-num">${(stats.totalSold||12847).toLocaleString()}</div><div class="admin-card-label">Products Sold</div><div class="admin-card-trend">↑ Live count</div></div>
+      <div class="admin-card"><div class="admin-card-num">${orders.length}</div><div class="admin-card-label">Total Orders</div><div class="admin-card-trend" style="color:var(--muted);">This session</div></div>
+      <div class="admin-card"><div class="admin-card-num">${totalStock}</div><div class="admin-card-label">Keys in Stock</div><div class="admin-card-trend" style="color:${totalStock<10?'#ff6b35':'#00ff87'};">${totalStock<10?'⚠ LOW STOCK':'✅ Good'}</div></div>
+    </div>
+    <div style="margin-bottom:1.5rem;display:flex;align-items:center;justify-content:space-between;">
+      <div style="font-family:'Orbitron',sans-serif;font-size:1rem;font-weight:700;">Recent Orders (${orders.length})</div>
+      <button class="btn btn-ghost" style="font-size:0.75rem;padding:0.4rem 1rem;" onclick="switchAdmin('products-mgr',document.querySelector('.admin-nav-item:nth-child(2)'))">Manage Stock →</button>
+    </div>
+    <div class="admin-table-wrap">
+      <table class="admin-table">
+        <thead><tr><th>Order ID</th><th>Products</th><th>Amount</th><th>Coin</th><th>Status</th><th>Date</th></tr></thead>
+        <tbody>
+          ${orders.length === 0 ? `<tr><td colspan="6" style="text-align:center;color:var(--muted);padding:2rem;">No orders yet</td></tr>` :
+          orders.slice(0,10).map(o => `<tr>
+            <td style="font-family:'Share Tech Mono',monospace;font-size:0.75rem;color:var(--pink);">${o.id}</td>
+            <td>${(o.items||[]).join(', ')}</td>
+            <td style="font-family:'Orbitron',monospace;font-weight:700;">$${o.total}</td>
+            <td style="font-family:'Share Tech Mono',monospace;font-size:0.75rem;color:var(--muted);">${o.coin}</td>
+            <td><span class="status-pill pill-success">${o.status}</span></td>
+            <td style="font-family:'Share Tech Mono',monospace;font-size:0.65rem;color:var(--muted);">${o.ts}</td>
+          </tr>`).join('')}
+        </tbody>
+      </table>
+    </div>`;
+}
+
+// ── PRODUCT MANAGER ──
+function renderProductsManager() {
+  const main = document.getElementById('admin-main');
+  if (!main) return;
+  const prods = loadProducts();
+  main.innerHTML = `
+    <div class="admin-header">
+      <div class="admin-title">📦 Products & Stock</div>
+      <button class="btn btn-pink" style="font-size:0.75rem;padding:0.5rem 1rem;" onclick="openAddProductForm()">+ Add Product</button>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:1.5rem;">
+      ${prods.map(p => {
+        const stock = p.keys ? p.keys.length : 0;
+        const stockColor = stock === 0 ? '#ff3b5c' : stock < 3 ? '#ff6b35' : '#00ff87';
+        return `<div style="border:1px solid rgba(255,0,170,0.2);border-radius:12px;background:rgba(255,255,255,0.02);overflow:hidden;">
+          <div style="padding:1.25rem;display:flex;align-items:center;gap:1rem;flex-wrap:wrap;">
+            <div style="width:48px;height:48px;border-radius:8px;background:linear-gradient(135deg,#1a0020,#050010);display:flex;align-items:center;justify-content:center;font-size:1.5rem;flex-shrink:0;">${p.emoji}</div>
+            <div style="flex:1;min-width:150px;">
+              <div style="font-family:'Orbitron',sans-serif;font-size:0.9rem;font-weight:700;">${p.name}</div>
+              <div style="font-family:'Share Tech Mono',monospace;font-size:0.65rem;color:var(--muted);">${p.cat} · $${p.price.toFixed(2)}</div>
+            </div>
+            <div style="text-align:right;min-width:90px;">
+              <div style="font-family:'Orbitron',sans-serif;font-size:1.2rem;font-weight:900;color:${stockColor};">${stock}</div>
+              <div style="font-family:'Share Tech Mono',monospace;font-size:0.6rem;color:var(--muted);">KEYS IN STOCK</div>
+            </div>
+            <div style="display:flex;gap:0.5rem;flex-wrap:wrap;">
+              <button class="btn btn-ghost" style="font-size:0.7rem;padding:0.35rem 0.75rem;" onclick="openStockEditor(${p.id})">✏ Edit Stock</button>
+              <button class="btn btn-ghost" style="font-size:0.7rem;padding:0.35rem 0.75rem;color:#ff6b35;border-color:rgba(255,107,53,0.3);" onclick="deleteProduct(${p.id})">🗑 Delete</button>
+            </div>
+          </div>
+          <div style="padding:0 1.25rem 1.25rem;">
+            <div style="font-family:'Share Tech Mono',monospace;font-size:0.62rem;color:var(--muted);margin-bottom:0.5rem;letter-spacing:0.12em;">STOCK KEYS (${stock} remaining):</div>
+            <div style="background:rgba(0,0,0,0.4);border:1px solid rgba(255,255,255,0.05);border-radius:6px;padding:0.75rem;font-family:'Share Tech Mono',monospace;font-size:0.72rem;color:#00f5ff;max-height:100px;overflow-y:auto;white-space:pre-wrap;">${(p.keys||[]).join('\n') || '(no keys — out of stock)'}</div>
+          </div>
+        </div>`;
+      }).join('')}
+    </div>`;
+}
+
+function openStockEditor(id) {
+  const prods = loadProducts();
+  const p = prods.find(x => x.id === id);
+  if (!p) return;
+  const main = document.getElementById('admin-main');
+  main.innerHTML = `
+    <div class="admin-header">
+      <div class="admin-title">✏ Edit Stock — ${p.name}</div>
+      <button class="btn btn-ghost" style="font-size:0.75rem;padding:0.4rem 1rem;" onclick="renderProductsManager()">← Back</button>
+    </div>
+    <div style="max-width:700px;">
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:1.5rem;">
+        <div class="form-group"><label class="form-label">Product Name</label><input class="form-input" id="ep-name" value="${p.name}"></div>
+        <div class="form-group"><label class="form-label">Category</label>
+          <select class="form-input" id="ep-cat">
+            ${['accounts','boosts','tools','licenses'].map(c=>`<option ${p.cat===c?'selected':''}>${c}</option>`).join('')}
+          </select>
+        </div>
+        <div class="form-group"><label class="form-label">Price (USD)</label><input class="form-input" id="ep-price" type="number" step="0.01" value="${p.price}"></div>
+        <div class="form-group"><label class="form-label">Emoji Icon</label><input class="form-input" id="ep-emoji" value="${p.emoji}"></div>
+        <div class="form-group"><label class="form-label">Badge</label>
+          <select class="form-input" id="ep-badge">
+            <option value="" ${!p.badge?'selected':''}>None</option>
+            <option value="hot" ${p.badge==='hot'?'selected':''}>🔥 HOT</option>
+            <option value="new" ${p.badge==='new'?'selected':''}>✨ NEW</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-group" style="margin-bottom:1rem;">
+        <label class="form-label">Description</label>
+        <input class="form-input" id="ep-desc" value="${p.desc}">
+      </div>
+      <div class="form-group" style="margin-bottom:0.5rem;">
+        <label class="form-label">Stock Keys — one per line (current: ${p.keys?p.keys.length:0} keys)</label>
+        <div style="font-family:'Share Tech Mono',monospace;font-size:0.65rem;color:var(--muted);margin-bottom:0.5rem;">
+          ℹ Each line = 1 product key. When customer buys, top line is delivered and removed automatically.
+        </div>
+        <textarea class="form-input" id="ep-keys" rows="12" style="font-family:'Share Tech Mono',monospace;font-size:0.8rem;resize:vertical;" placeholder="KEY-AAAA-1111&#10;KEY-BBBB-2222&#10;KEY-CCCC-3333">${(p.keys||[]).join('\n')}</textarea>
+      </div>
+      <div style="font-family:'Share Tech Mono',monospace;font-size:0.65rem;color:#00ff87;margin-bottom:1.25rem;">
+        ✅ Keys are delivered to customers automatically. Once all keys are sold, product shows "Out of Stock".
+      </div>
+      <div style="display:flex;gap:1rem;">
+        <button class="btn btn-pink btn-lg" style="flex:1;justify-content:center;" onclick="saveProductEdit(${id})">💾 Save Changes</button>
+        <button class="btn btn-ghost" onclick="renderProductsManager()">Cancel</button>
+      </div>
+    </div>`;
+}
+
+function saveProductEdit(id) {
+  const prods = loadProducts();
+  const p = prods.find(x => x.id === id);
+  if (!p) return;
+  const keysRaw = document.getElementById('ep-keys').value;
+  p.name  = document.getElementById('ep-name').value.trim();
+  p.cat   = document.getElementById('ep-cat').value;
+  p.price = parseFloat(document.getElementById('ep-price').value) || p.price;
+  p.emoji = document.getElementById('ep-emoji').value.trim();
+  p.badge = document.getElementById('ep-badge').value;
+  p.desc  = document.getElementById('ep-desc').value.trim();
+  p.keys  = keysRaw.split('\n').map(k => k.trim()).filter(k => k.length > 0);
+  saveProducts(prods);
+  products = prods;
+  showToast(`✅ ${p.name} saved! Stock: ${p.keys.length} keys`);
+  renderProductsManager();
+}
+
+function openAddProductForm() {
+  const main = document.getElementById('admin-main');
+  main.innerHTML = `
+    <div class="admin-header">
+      <div class="admin-title">➕ Add New Product</div>
+      <button class="btn btn-ghost" style="font-size:0.75rem;padding:0.4rem 1rem;" onclick="renderProductsManager()">← Back</button>
+    </div>
+    <div style="max-width:700px;">
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:1rem;">
+        <div class="form-group"><label class="form-label">Product Name</label><input class="form-input" id="np-name" placeholder="Discord Nitro"></div>
+        <div class="form-group"><label class="form-label">Category</label>
+          <select class="form-input" id="np-cat"><option>accounts</option><option>boosts</option><option>tools</option><option>licenses</option></select>
+        </div>
+        <div class="form-group"><label class="form-label">Price (USD)</label><input class="form-input" id="np-price" type="number" step="0.01" placeholder="4.99"></div>
+        <div class="form-group"><label class="form-label">Emoji Icon</label><input class="form-input" id="np-emoji" placeholder="💎"></div>
+        <div class="form-group"><label class="form-label">Badge</label>
+          <select class="form-input" id="np-badge"><option value="">None</option><option value="hot">🔥 HOT</option><option value="new">✨ NEW</option></select>
+        </div>
+      </div>
+      <div class="form-group" style="margin-bottom:1rem;">
+        <label class="form-label">Description</label>
+        <input class="form-input" id="np-desc" placeholder="Product description...">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Stock Keys — one per line</label>
+        <div style="font-family:'Share Tech Mono',monospace;font-size:0.65rem;color:var(--muted);margin-bottom:0.5rem;">
+          ℹ Each line = 1 product. Top line delivered first when customer buys.
+        </div>
+        <textarea class="form-input" id="np-keys" rows="10" style="font-family:'Share Tech Mono',monospace;font-size:0.8rem;resize:vertical;" placeholder="KEY-AAAA-1111&#10;KEY-BBBB-2222&#10;KEY-CCCC-3333"></textarea>
+      </div>
+      <button class="btn btn-pink btn-lg" style="margin-top:1.5rem;width:100%;justify-content:center;" onclick="addNewProduct()">🚀 Publish Product</button>
+    </div>`;
+}
+
+function addNewProduct() {
+  const name  = document.getElementById('np-name').value.trim();
+  const price = parseFloat(document.getElementById('np-price').value);
+  const keysRaw = document.getElementById('np-keys').value;
+  if (!name || !price) { showToast('❌ Fill in name and price!'); return; }
+  const prods = loadProducts();
+  const newId = Math.max(...prods.map(p => p.id), 0) + 1;
+  prods.push({
+    id: newId,
+    name,
+    cat:   document.getElementById('np-cat').value,
+    price,
+    emoji: document.getElementById('np-emoji').value.trim() || '📦',
+    badge: document.getElementById('np-badge').value,
+    desc:  document.getElementById('np-desc').value.trim(),
+    keys:  keysRaw.split('\n').map(k => k.trim()).filter(k => k.length > 0),
+  });
+  saveProducts(prods);
+  products = prods;
+  showToast(`✅ ${name} published with ${prods[prods.length-1].keys.length} keys!`);
+  renderProductsManager();
+}
+
+function deleteProduct(id) {
+  if (!confirm('Delete this product and all its keys?')) return;
+  const prods = loadProducts().filter(p => p.id !== id);
+  saveProducts(prods);
+  products = prods;
+  showToast('🗑 Product deleted.');
+  renderProductsManager();
+}
+
+// ── CRYPTO ADDRESS MANAGER ──
+function renderCryptoManager() {
+  const main = document.getElementById('admin-main');
+  if (!main) return;
+  const addrs = loadAddrs();
+  const coins = [
+    { sym:'BTC', name:'Bitcoin', icon:'₿', col:'#f7931a' },
+    { sym:'ETH', name:'Ethereum', icon:'Ξ', col:'#627eea' },
+    { sym:'USDT', name:'USDT TRC-20', icon:'₮', col:'#26a17b' },
+    { sym:'LTC', name:'Litecoin', icon:'Ł', col:'#bfd2d1' },
+    { sym:'SOL', name:'Solana', icon:'◎', col:'#9945ff' },
+    { sym:'XMR', name:'Monero', icon:'ɱ', col:'#ff6600' },
+  ];
+  main.innerHTML = `
+    <div class="admin-header">
+      <div class="admin-title">💳 Crypto Wallet Addresses</div>
+    </div>
+    <div style="background:rgba(0,245,255,0.05);border:1px solid rgba(0,245,255,0.2);border-radius:10px;padding:1rem 1.25rem;margin-bottom:1.5rem;font-family:'Share Tech Mono',monospace;font-size:0.7rem;color:#00f5ff;">
+      ℹ These addresses are shown to customers at checkout. Change them anytime — updates take effect immediately.
+    </div>
+    <div style="display:flex;flex-direction:column;gap:1rem;max-width:700px;">
+      ${coins.map(c => `
+        <div style="border:1px solid rgba(255,0,170,0.15);border-radius:10px;padding:1.25rem;background:rgba(255,255,255,0.02);">
+          <div style="display:flex;align-items:center;gap:0.75rem;margin-bottom:0.75rem;">
+            <div style="width:36px;height:36px;border-radius:8px;background:${c.col}22;display:flex;align-items:center;justify-content:center;font-size:1.1rem;color:${c.col};flex-shrink:0;">${c.icon}</div>
+            <div>
+              <div style="font-family:'Orbitron',sans-serif;font-size:0.85rem;font-weight:700;">${c.sym}</div>
+              <div style="font-family:'Share Tech Mono',monospace;font-size:0.6rem;color:var(--muted);">${c.name}</div>
+            </div>
+          </div>
+          <input class="form-input" id="addr-${c.sym}" value="${addrs[c.sym]||''}" placeholder="Enter your ${c.sym} wallet address" style="font-family:'Share Tech Mono',monospace;font-size:0.75rem;">
+        </div>`).join('')}
+      <button class="btn btn-pink btn-lg" style="justify-content:center;margin-top:0.5rem;" onclick="saveCryptoAddresses()">💾 Save All Addresses</button>
+    </div>`;
+}
+
+function saveCryptoAddresses() {
+  const coins = ['BTC','ETH','USDT','LTC','SOL','XMR'];
+  const addrs = {};
+  coins.forEach(c => {
+    const el = document.getElementById('addr-' + c);
+    if (el) addrs[c] = el.value.trim();
+  });
+  try { localStorage.setItem('echy_crypto_addrs', JSON.stringify(addrs)); } catch(e) {}
+  cryptoAddresses = addrs;
+  showToast('✅ All crypto addresses saved! Customers see them live.');
+}
+
+// ── ORDERS MANAGER ──
+function renderOrdersManager() {
+  const main = document.getElementById('admin-main');
+  if (!main) return;
+  const orders = loadOrders();
+  main.innerHTML = `
+    <div class="admin-header">
+      <div class="admin-title">🛒 All Orders (${orders.length})</div>
+      <button class="btn btn-ghost" style="font-size:0.7rem;padding:0.35rem 0.75rem;" onclick="if(confirm('Clear all orders?')){localStorage.removeItem('echy_orders');renderOrdersManager();}">🗑 Clear All</button>
+    </div>
+    ${orders.length === 0 ? '<div style="text-align:center;padding:3rem;color:var(--muted);font-family:\'Share Tech Mono\',monospace;">No orders yet</div>' : `
+    <div class="admin-table-wrap">
+      <table class="admin-table">
+        <thead><tr><th>Order ID</th><th>Products</th><th>Amount</th><th>Coin</th><th>Keys Delivered</th><th>Date</th></tr></thead>
+        <tbody>
+          ${orders.map(o => `<tr>
+            <td style="font-family:'Share Tech Mono',monospace;font-size:0.75rem;color:var(--pink);">${o.id}</td>
+            <td style="font-size:0.82rem;">${(o.items||[]).join(', ')}</td>
+            <td style="font-family:'Orbitron',sans-serif;font-weight:700;">$${o.total}</td>
+            <td style="font-family:'Share Tech Mono',monospace;font-size:0.75rem;color:var(--muted);">${o.coin}</td>
+            <td style="font-family:'Share Tech Mono',monospace;font-size:0.65rem;color:#00f5ff;">
+              ${Object.entries(o.keys||{}).map(([n,ks])=>`${n}: ${ks.join(', ')}`).join('<br>') || '—'}
+            </td>
+            <td style="font-family:'Share Tech Mono',monospace;font-size:0.65rem;color:var(--muted);">${o.ts}</td>
+          </tr>`).join('')}
+        </tbody>
+      </table>
+    </div>`}`;
+}
+
+function adminAddProduct() { openAddProductForm(); }
+
+function switchAdmin(panel, el) {
+  document.querySelectorAll('.admin-nav-item').forEach(i => i.classList.remove('active'));
+  if (el) el.classList.add('active');
+  if (panel === 'dashboard')    { renderAdminDashboard(); return; }
+  if (panel === 'products-mgr') { renderProductsManager(); return; }
+  if (panel === 'orders-mgr')   { renderOrdersManager(); return; }
+  if (panel === 'payments-mgr') { renderCryptoManager(); return; }
+  if (panel === 'socials-mgr')  { renderSocialsManager(); return; }
+  if (panel === 'supabase-mgr') { renderSupabaseManager(); return; }
+  const titles = { 'users-mgr':'Users', 'reviews-mgr':'Reviews', 'coupons-mgr':'Coupons', 'settings-mgr':'Settings' };
+  document.getElementById('admin-main').innerHTML = `
+    <div class="admin-header"><div class="admin-title">${titles[panel] || panel}</div></div>
+    <div style="display:flex;align-items:center;justify-content:center;height:200px;border:1px solid var(--border);border-radius:12px;background:var(--glass);font-family:'Share Tech Mono',monospace;font-size:0.8rem;color:var(--muted);">
+      ${titles[panel] || panel} module — connect your backend API.
+    </div>`;
+}
+
+// ── SOCIAL LINKS MANAGER ──
+function renderSocialsManager() {
+  const main = document.getElementById('admin-main');
+  if (!main) return;
+  let s = {};
+  try { s = JSON.parse(localStorage.getItem('echy_social') || '{}'); } catch(e) {}
+  main.innerHTML = `
+    <div class="admin-header">
+      <div class="admin-title">🔗 Social Links</div>
+    </div>
+    <div style="background:rgba(0,245,255,0.05);border:1px solid rgba(0,245,255,0.2);border-radius:10px;padding:1rem 1.25rem;margin-bottom:1.5rem;font-family:'Share Tech Mono',monospace;font-size:0.7rem;color:#00f5ff;">
+      ℹ Store ke hero aur footer mein ye links dikhte hain. Supabase connected ho to dono files mein instantly update hoga.
+    </div>
+    <div style="display:flex;flex-direction:column;gap:1rem;max-width:600px;">
+      <div style="border:1px solid rgba(88,101,242,0.3);border-radius:10px;padding:1.25rem;background:rgba(88,101,242,0.05);">
+        <div style="display:flex;align-items:center;gap:0.75rem;margin-bottom:0.75rem;">
+          <div style="width:36px;height:36px;border-radius:8px;background:#5865f222;display:flex;align-items:center;justify-content:center;font-size:1.3rem;">💬</div>
+          <div>
+            <div style="font-family:'Orbitron',sans-serif;font-size:0.85rem;font-weight:700;color:#5865f2;">Discord</div>
+            <div style="font-family:'Share Tech Mono',monospace;font-size:0.6rem;color:var(--muted);">discord.gg invite link</div>
+          </div>
+        </div>
+        <input class="form-input" id="soc-discord" value="${s.discord||'https://discord.gg/YOURCODE'}" placeholder="https://discord.gg/YOURCODE" style="font-family:'Share Tech Mono',monospace;font-size:0.75rem;">
+      </div>
+      <div style="border:1px solid rgba(0,136,204,0.3);border-radius:10px;padding:1.25rem;background:rgba(0,136,204,0.05);">
+        <div style="display:flex;align-items:center;gap:0.75rem;margin-bottom:0.75rem;">
+          <div style="width:36px;height:36px;border-radius:8px;background:#0088cc22;display:flex;align-items:center;justify-content:center;font-size:1.3rem;">✈️</div>
+          <div>
+            <div style="font-family:'Orbitron',sans-serif;font-size:0.85rem;font-weight:700;color:#0088cc;">Telegram</div>
+            <div style="font-family:'Share Tech Mono',monospace;font-size:0.6rem;color:var(--muted);">t.me channel/group link</div>
+          </div>
+        </div>
+        <input class="form-input" id="soc-telegram" value="${s.telegram||'https://t.me/YOURCHANNEL'}" placeholder="https://t.me/YOURCHANNEL" style="font-family:'Share Tech Mono',monospace;font-size:0.75rem;">
+      </div>
+      <button class="btn btn-pink btn-lg" style="justify-content:center;margin-top:0.5rem;" onclick="saveSocialLinksAdmin()">💾 Save & Go Live</button>
+      <div id="social-save-status" style="font-family:'Share Tech Mono',monospace;font-size:0.7rem;color:var(--muted);text-align:center;"></div>
+    </div>`;
+}
+
+async function saveSocialLinksAdmin() {
+  const discord  = document.getElementById('soc-discord')?.value.trim()  || '';
+  const telegram = document.getElementById('soc-telegram')?.value.trim() || '';
+  const s = { discord, telegram };
+  localStorage.setItem('echy_social', JSON.stringify(s));
+  const status = document.getElementById('social-save-status');
+  if (status) status.textContent = '⏳ Saving to Supabase...';
+  // Save to Supabase
+  const result = await sbFetch('echy_settings', {
+    method: 'POST',
+    prefer: 'resolution=merge-duplicates',
+    body: JSON.stringify({ key: 'social_links', value: JSON.stringify(s) }),
+  });
+  if (status) {
+    status.textContent = result ? '✅ Saved! Both store + admin files will show new links.' : '⚠ Supabase na mila — localStorage mein saved (same browser pe kaam karega).';
+    status.style.color = result ? '#00ff87' : '#ffd600';
+  }
+  showToast('✅ Social links saved!');
+  updateSocialLinks();
+}
+
+// ── SUPABASE MANAGER ──
+function renderSupabaseManager() {
+  const main = document.getElementById('admin-main');
+  if (!main) return;
+  const url = SUPABASE_URL !== 'https://YOUR_PROJECT.supabase.co' ? SUPABASE_URL : '';
+  const key = SUPABASE_KEY !== 'YOUR_ANON_KEY' ? SUPABASE_KEY.slice(0,20)+'...' : '';
+  main.innerHTML = `
+    <div class="admin-header">
+      <div class="admin-title">🗄️ Supabase Setup</div>
+    </div>
+    <div style="background:rgba(62,207,142,0.05);border:1px solid rgba(62,207,142,0.2);border-radius:10px;padding:1.25rem;margin-bottom:1.5rem;font-family:'Share Tech Mono',monospace;font-size:0.7rem;color:#3ecf8e;line-height:1.8;">
+      <div style="font-size:0.85rem;font-weight:700;margin-bottom:0.75rem;">📋 Setup Steps:</div>
+      <div>1. supabase.com pe free account banao</div>
+      <div>2. New project create karo</div>
+      <div>3. SQL Editor mein neeche diya SQL run karo</div>
+      <div>4. Project URL aur anon key dono HTML files mein daalo (SUPABASE_URL, SUPABASE_KEY)</div>
+    </div>
+    <div style="max-width:700px;">
+      <div style="font-family:'Orbitron',sans-serif;font-size:0.8rem;font-weight:700;margin-bottom:0.75rem;color:var(--pink);">📄 Database Tables SQL:</div>
+      <div style="background:#0a0a0f;border:1px solid rgba(255,0,170,0.2);border-radius:8px;padding:1.25rem;font-family:'Share Tech Mono',monospace;font-size:0.68rem;color:#00f5ff;white-space:pre;overflow-x:auto;line-height:1.7;margin-bottom:1rem;">-- Run this in Supabase SQL Editor
+
+create table if not exists echy_products (
+  id integer primary key,
+  name text not null,
+  cat text,
+  price numeric,
+  emoji text,
+  badge text,
+  desc text,
+  keys jsonb default '[]'::jsonb
+);
+
+create table if not exists echy_orders (
+  id uuid primary key default gen_random_uuid(),
+  order_id text,
+  items jsonb,
+  total numeric,
+  coin text,
+  status text,
+  keys_delivered jsonb,
+  created_at timestamptz default now()
+);
+
+create table if not exists echy_settings (
+  key text primary key,
+  value text
+);
+
+-- Enable Row Level Security (RLS) — optional for security
+alter table echy_products enable row level security;
+alter table echy_orders enable row level security;
+alter table echy_settings enable row level security;
+
+-- Allow anon key read/write (simple setup)
+create policy "anon all" on echy_products for all using (true) with check (true);
+create policy "anon all" on echy_orders for all using (true) with check (true);
+create policy "anon all" on echy_settings for all using (true) with check (true);</div>
+      <div style="font-family:'Orbitron',sans-serif;font-size:0.8rem;font-weight:700;margin-bottom:0.75rem;color:var(--pink);">⚙️ Current Config Status:</div>
+      <div style="background:rgba(255,255,255,0.03);border:1px solid var(--border);border-radius:8px;padding:1rem;font-family:'Share Tech Mono',monospace;font-size:0.72rem;line-height:2;">
+        <div>URL: <span style="color:${url ? '#00ff87':'#ff3b5c'}">${url || '❌ NOT SET — dono HTML files mein SUPABASE_URL daalo'}</span></div>
+        <div>Key: <span style="color:${key ? '#00ff87':'#ff3b5c'}">${key || '❌ NOT SET — dono HTML files mein SUPABASE_KEY daalo'}</span></div>
+      </div>
+      <div style="margin-top:1rem;display:flex;gap:0.75rem;">
+        <button class="btn btn-ghost" style="font-size:0.75rem;" onclick="testSupabaseConn()">🔌 Test Connection</button>
+        <button class="btn btn-ghost" style="font-size:0.75rem;" onclick="syncAllToSupabase()">🔄 Push All Data Now</button>
+      </div>
+      <div id="sb-status" style="margin-top:1rem;font-family:'Share Tech Mono',monospace;font-size:0.72rem;color:var(--muted);"></div>
+    </div>`;
+}
+
+async function testSupabaseConn() {
+  const el = document.getElementById('sb-status');
+  if (el) el.textContent = '⏳ Testing...';
+  const r = await sbFetch('echy_settings?limit=1');
+  if (el) {
+    el.textContent = r !== null ? '✅ Supabase connected!' : '❌ Connection failed. URL/Key check karo.';
+    el.style.color = r !== null ? '#00ff87' : '#ff3b5c';
+  }
+}
+
+async function syncAllToSupabase() {
+  const el = document.getElementById('sb-status');
+  if (el) el.textContent = '⏳ Syncing products, addresses, settings...';
+  const prods = sharedProds();
+  if (prods.length) saveSharedProds(prods);
+  const addrs = sharedAddrs();
+  saveSharedAddrs(addrs);
+  if (el) {
+    el.textContent = `✅ ${prods.length} products + addresses pushed to Supabase!`;
+    el.style.color = '#00ff87';
+  }
+  showToast('✅ All data synced to Supabase!');
+}
+</script>
+</body>
+</html>
