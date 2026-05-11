@@ -2101,96 +2101,91 @@ PAGES['gateway']=function(m){
 <div class="ph">
   <div>
     <div class="ph-title">Payment Gateway</div>
-    <div class="ph-sub">OXAPAY · NO MINIMUM · 0.4% FEE · 50+ COINS</div>
+    <div class="ph-sub">PLISIO · NO MINIMUM · FREE SIGNUP · 20+ COINS</div>
   </div>
   <div class="ph-actions">
-    <button class="btn btn-ghost btn-sm" onclick="gwTestConn()">🔌 Test API</button>
-    <button class="btn btn-pink btn-sm" onclick="gwOpenCreate()">+ Create Invoice</button>
+    <button class="btn btn-ghost btn-sm" onclick="gwTest()">🔌 Test Key</button>
+    <button class="btn btn-pink btn-sm" onclick="document.getElementById('inv-amount').focus()">+ Create Invoice</button>
   </div>
 </div>
 
-<!-- WHY OXAPAY BANNER -->
-<div style="background:linear-gradient(135deg,rgba(0,245,255,.06),rgba(179,0,255,.06));border:1px solid rgba(0,245,255,.2);border-radius:12px;padding:1.25rem 1.5rem;margin-bottom:1.5rem;display:flex;align-items:center;gap:1.25rem;flex-wrap:wrap;">
-  <div style="font-size:2.2rem;">⚡</div>
+<div style="background:linear-gradient(135deg,rgba(0,245,255,.06),rgba(179,0,255,.06));border:1px solid rgba(0,245,255,.22);border-radius:12px;padding:1.25rem 1.5rem;margin-bottom:1.5rem;display:flex;align-items:center;gap:1.25rem;flex-wrap:wrap;">
+  <div style="font-size:2rem;">⚡</div>
   <div style="flex:1;">
-    <div style="font-family:'Orbitron',sans-serif;font-size:.95rem;font-weight:800;background:linear-gradient(90deg,#00f5ff,#b300ff);-webkit-background-clip:text;-webkit-text-fill-color:transparent;">OxaPay — Zero Minimum Amount</div>
+    <div style="font-family:'Orbitron',sans-serif;font-size:.92rem;font-weight:800;background:linear-gradient(90deg,#00f5ff,#b300ff);-webkit-background-clip:text;-webkit-text-fill-color:transparent;">Plisio — Zero Minimum, Instant Signup</div>
     <div style="font-family:'Share Tech Mono',monospace;font-size:.62rem;color:var(--muted2);margin-top:.3rem;line-height:1.8;">
-      $0.001 bhi accept karo &nbsp;·&nbsp; Simple API key — no signing needed &nbsp;·&nbsp; 50+ coins &nbsp;·&nbsp; 0.4% fee &nbsp;·&nbsp; Free signup
+      Sirf email se signup · No KYC · $0.001 bhi accept karo · BTC ETH USDT LTC XMR DOGE + 15 more · 0.5% fee
     </div>
   </div>
-  <a href="https://oxapay.com" target="_blank" rel="noopener" class="btn btn-ghost btn-sm">oxapay.com ↗</a>
+  <a href="https://plisio.net/create-account" target="_blank" rel="noopener" class="btn btn-ghost btn-sm">Signup Free ↗</a>
 </div>
 
-<!-- STATS ROW -->
 <div class="metrics" style="margin-bottom:1.5rem;">
   <div class="metric"><div class="metric-val" style="color:var(--green);">$0</div><div class="metric-lbl">Minimum Amount</div></div>
-  <div class="metric"><div class="metric-val" style="color:var(--cyan);">0.4%</div><div class="metric-lbl">Per Transaction</div></div>
-  <div class="metric"><div class="metric-val" style="color:var(--purp);">50+</div><div class="metric-lbl">Supported Coins</div></div>
+  <div class="metric"><div class="metric-val" style="color:var(--cyan);">0.5%</div><div class="metric-lbl">Fee Per TX</div></div>
+  <div class="metric"><div class="metric-val" style="color:var(--purp);">20+</div><div class="metric-lbl">Coins Supported</div></div>
   <div class="metric"><div class="metric-val" id="gw-inv-count" style="color:var(--pink);">0</div><div class="metric-lbl">Invoices (Session)</div></div>
 </div>
 
 <div style="display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;margin-bottom:1.5rem;">
 
-<!-- SETUP CARD -->
 <div class="panel">
-  <div class="panel-head"><div class="panel-title">🔧 Setup — OxaPay API</div></div>
+  <div class="panel-head"><div class="panel-title">🔧 Setup — Plisio</div></div>
   <div class="panel-body">
-    <div style="background:rgba(0,245,255,.05);border:1px solid rgba(0,245,255,.15);border-radius:8px;padding:.85rem;margin-bottom:1rem;font-family:'Share Tech Mono',monospace;font-size:.63rem;color:#00f5ff;line-height:2;">
-      <div><span style="color:var(--pink);">1.</span> <a href="https://oxapay.com" target="_blank" style="color:var(--cyan);">oxapay.com</a> pe free signup karo</div>
-      <div><span style="color:var(--pink);">2.</span> Dashboard → API Keys → Create Merchant Key</div>
-      <div><span style="color:var(--pink);">3.</span> Key neeche paste karo → Save → Done!</div>
+    <div style="background:rgba(0,245,255,.05);border:1px solid rgba(0,245,255,.15);border-radius:8px;padding:.85rem;margin-bottom:1rem;font-family:'Share Tech Mono',monospace;font-size:.63rem;color:#00f5ff;line-height:2.1;">
+      <div><span style="color:var(--pink);font-weight:700;">1.</span> <a href="https://plisio.net/create-account" target="_blank" style="color:var(--cyan);">plisio.net/create-account</a> pe signup karo</div>
+      <div><span style="color:var(--pink);font-weight:700;">2.</span> Dashboard → Stores → New Store banao</div>
+      <div><span style="color:var(--pink);font-weight:700;">3.</span> Store → API → Secret Key copy karo</div>
+      <div><span style="color:var(--pink);font-weight:700;">4.</span> Neeche paste karo → Save → Done!</div>
     </div>
     <div class="fg" style="margin-bottom:.75rem;">
-      <label class="fl">OxaPay Merchant API Key</label>
-      <input class="fi" id="gw-oxapay-key" type="password" placeholder="your-oxapay-merchant-api-key" style="font-family:'Share Tech Mono',monospace;font-size:.72rem;" oninput="gwCheckOxaKey()">
+      <label class="fl">Plisio Secret API Key</label>
+      <input class="fi" id="gw-plisio-key" type="password" placeholder="your-plisio-secret-key" style="font-family:'Share Tech Mono',monospace;" oninput="gwCheckKey()">
     </div>
     <div class="fg" style="margin-bottom:.75rem;">
-      <label class="fl">Callback / Webhook URL</label>
-      <input class="fi" id="gw-callback" value="https://echystore.com/api/oxapay/callback" style="font-family:'Share Tech Mono',monospace;font-size:.68rem;color:var(--cyan);" onclick="this.select();navigator.clipboard?.writeText(this.value);toast('ok','Copied!')" readonly title="Click to copy">
+      <label class="fl">Callback URL (Plisio dashboard mein daalo)</label>
+      <input class="fi" id="gw-callback-url" value="https://echystore.com/api/plisio/callback" style="font-family:'Share Tech Mono',monospace;font-size:.68rem;color:var(--cyan);" onclick="this.select();navigator.clipboard?.writeText(this.value);toast('ok','Copied!')" readonly>
     </div>
     <div class="fg" style="margin-bottom:1rem;">
-      <label class="fl">Return URL (after payment)</label>
-      <input class="fi" id="gw-return" value="https://echystore.com/thank-you" style="font-family:'Share Tech Mono',monospace;font-size:.68rem;">
+      <label class="fl">Success Redirect URL</label>
+      <input class="fi" id="gw-success-url" value="https://echystore.com" style="font-family:'Share Tech Mono',monospace;font-size:.68rem;">
     </div>
     <div style="display:flex;gap:.5rem;align-items:center;">
-      <button class="btn btn-pink btn-sm" onclick="gwSaveOxaConfig()">💾 Save Config</button>
-      <button class="btn btn-ghost btn-sm" onclick="gwTestConn()">🔌 Test Connection</button>
+      <button class="btn btn-pink btn-sm" onclick="gwSave()">💾 Save</button>
+      <button class="btn btn-ghost btn-sm" onclick="gwTest()">🔌 Test</button>
     </div>
-    <div id="gw-save-msg" style="font-family:'Share Tech Mono',monospace;font-size:.62rem;color:var(--muted2);margin-top:.5rem;"></div>
-    <div id="gw-api-status" style="display:inline-flex;align-items:center;gap:.4rem;font-family:'Share Tech Mono',monospace;font-size:.62rem;margin-top:.5rem;color:var(--muted2);">
-      <span id="gw-status-dot" style="width:7px;height:7px;border-radius:50%;background:#555;"></span>
-      <span id="gw-status-txt">Not configured</span>
+    <div id="gw-save-msg" style="font-family:'Share Tech Mono',monospace;font-size:.62rem;margin-top:.5rem;color:var(--muted2);"></div>
+    <div style="display:flex;align-items:center;gap:.4rem;margin-top:.4rem;">
+      <span id="gw-dot" style="width:7px;height:7px;border-radius:50%;background:#555;display:inline-block;"></span>
+      <span id="gw-status" style="font-family:'Share Tech Mono',monospace;font-size:.62rem;color:var(--muted2);">Not configured</span>
     </div>
   </div>
 </div>
 
-<!-- CREATE INVOICE CARD -->
 <div class="panel">
-  <div class="panel-head"><div class="panel-title">⚡ Create Payment Invoice</div></div>
+  <div class="panel-head"><div class="panel-title">⚡ Create Invoice</div></div>
   <div class="panel-body">
     <div style="background:rgba(0,255,135,.04);border:1px solid rgba(0,255,135,.12);border-radius:8px;padding:.6rem .85rem;margin-bottom:.85rem;font-family:'Share Tech Mono',monospace;font-size:.6rem;color:var(--green);">
-      ✅ No minimum — $0.01 se bhi chhota invoice banao
+      ✅ No minimum — $0.01 ya usse bhi kam amount karo
     </div>
     <div class="fg-grid">
       <div class="fg">
         <label class="fl">Amount (USD)</label>
-        <input class="fi" id="inv-amount" type="number" placeholder="1.50" step="0.01" min="0.001">
+        <input class="fi" id="inv-amount" type="number" placeholder="1.00" step="0.01" min="0.001">
       </div>
       <div class="fg">
-        <label class="fl">Accept Coin</label>
+        <label class="fl">Coin</label>
         <select class="fs" id="inv-coin">
-          <option value="USDT">USDT (TRC-20)</option>
           <option value="BTC">Bitcoin (BTC)</option>
           <option value="ETH">Ethereum (ETH)</option>
-          <option value="SOL">Solana (SOL)</option>
+          <option value="USDT">USDT (TRC-20)</option>
           <option value="LTC">Litecoin (LTC)</option>
-          <option value="TRX">TRON (TRX)</option>
           <option value="XMR">Monero (XMR)</option>
           <option value="DOGE">Dogecoin (DOGE)</option>
-          <option value="BNB">BNB (BSC)</option>
-          <option value="MATIC">MATIC (Polygon)</option>
-          <option value="USDC">USDC (ERC-20)</option>
-          <option value="DAI">DAI (ERC-20)</option>
+          <option value="BCH">Bitcoin Cash</option>
+          <option value="BNB">BNB</option>
+          <option value="SOL">Solana (SOL)</option>
+          <option value="TRX">TRON (TRX)</option>
         </select>
       </div>
       <div class="fg">
@@ -2199,291 +2194,217 @@ PAGES['gateway']=function(m){
       </div>
       <div class="fg">
         <label class="fl">Expiry (minutes)</label>
-        <input class="fi" id="inv-expiry" type="number" value="60" placeholder="60">
+        <input class="fi" id="inv-expiry" type="number" value="60">
       </div>
       <div class="fg fg-full">
         <label class="fl">Description</label>
-        <input class="fi" id="inv-desc" placeholder="Discord Nitro x1 — Echy Store">
+        <input class="fi" id="inv-desc" placeholder="Discord Nitro x1">
       </div>
     </div>
-    <button class="btn btn-pink" style="width:100%;justify-content:center;margin-top:.5rem;" onclick="gwCreateOxaInvoice()">🚀 Generate Invoice →</button>
+    <button class="btn btn-pink" style="width:100%;justify-content:center;margin-top:.75rem;" onclick="gwCreate()">🚀 Generate Invoice →</button>
 
-    <!-- Invoice Result -->
     <div id="inv-result" style="display:none;margin-top:1rem;border:1px solid rgba(0,245,255,.2);border-radius:8px;padding:1rem;background:rgba(0,245,255,.03);">
-      <div style="font-family:'Share Tech Mono',monospace;font-size:.58rem;color:var(--muted2);margin-bottom:.5rem;letter-spacing:.1em;">INVOICE GENERATED ✅</div>
-      <div style="font-family:'Share Tech Mono',monospace;font-size:.6rem;color:var(--muted2);margin-bottom:.25rem;">Payment Link:</div>
+      <div style="font-family:'Share Tech Mono',monospace;font-size:.58rem;color:var(--muted2);margin-bottom:.5rem;letter-spacing:.1em;">✅ INVOICE CREATED</div>
+      <div style="font-family:'Share Tech Mono',monospace;font-size:.6rem;color:var(--muted2);margin-bottom:.3rem;">Payment Link:</div>
       <div id="inv-link" style="font-family:'Share Tech Mono',monospace;font-size:.65rem;color:var(--cyan);word-break:break-all;padding:.5rem;background:rgba(0,0,0,.4);border-radius:4px;margin-bottom:.6rem;"></div>
-      <div id="inv-extra" style="font-family:'Share Tech Mono',monospace;font-size:.6rem;color:var(--muted2);margin-bottom:.6rem;"></div>
-      <div style="display:flex;gap:.5rem;">
-        <button class="btn btn-ghost btn-xs" onclick="navigator.clipboard?.writeText(document.getElementById('inv-link').textContent);toast('ok','Link copied!')">📋 Copy</button>
+      <div id="inv-extra" style="font-family:'Share Tech Mono',monospace;font-size:.6rem;color:var(--muted2);margin-bottom:.6rem;line-height:1.8;"></div>
+      <div style="display:flex;gap:.5rem;flex-wrap:wrap;">
+        <button class="btn btn-ghost btn-xs" onclick="navigator.clipboard?.writeText(document.getElementById('inv-link').textContent);toast('ok','Link copied!')">📋 Copy Link</button>
         <button class="btn btn-ghost btn-xs" onclick="window.open(document.getElementById('inv-link').textContent,'_blank')">🔗 Open</button>
-        <button class="btn btn-ghost btn-xs" onclick="gwCheckStatus()">🔄 Check Status</button>
       </div>
     </div>
   </div>
 </div>
 
-</div><!-- /grid -->
+</div>
 
-<!-- HOW IT WORKS -->
 <div class="panel" style="margin-bottom:1.5rem;">
-  <div class="panel-head"><div class="panel-title">📡 OxaPay API — Kaisa Kaam Karta Hai</div></div>
+  <div class="panel-head"><div class="panel-title">📡 API Info</div></div>
   <div class="panel-body">
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;">
-      <div>
-        <div style="font-family:'Share Tech Mono',monospace;font-size:.65rem;color:var(--muted2);line-height:2;">
-          <div style="color:var(--cyan);margin-bottom:.4rem;font-weight:700;">Invoice Create (POST):</div>
-          <div>URL: api.oxapay.com/merchants/request</div>
-          <div>Header: merchant = your-api-key</div>
-          <div>Body: amount, currency, orderId, etc.</div>
-          <div style="margin-top:.5rem;color:var(--green);">Response: payLink, trackId</div>
-        </div>
+      <div style="font-family:'Share Tech Mono',monospace;font-size:.63rem;color:var(--muted2);line-height:2;">
+        <div style="color:var(--cyan);margin-bottom:.3rem;font-weight:700;">Invoice Create:</div>
+        <div>GET api.plisio.net/api/v1/invoices/new</div>
+        <div>?source_currency=USD</div>
+        <div>&source_amount=1.50</div>
+        <div>&currency=BTC</div>
+        <div>&order_number=EC-001</div>
+        <div>&api_key=your-secret-key</div>
+        <div style="color:var(--green);margin-top:.5rem;">Response: invoice_url, txn_id</div>
       </div>
-      <div>
-        <div style="font-family:'Share Tech Mono',monospace;font-size:.65rem;color:var(--muted2);line-height:2;">
-          <div style="color:var(--cyan);margin-bottom:.4rem;font-weight:700;">Signing:</div>
-          <div style="color:var(--green);">✅ Koi signing nahi — sirf API key header</div>
-          <div style="color:var(--green);">✅ Direct browser se call hoti hai</div>
-          <div style="color:var(--green);">✅ CORS allowed (oxapay supports it)</div>
-          <div style="color:var(--green);">✅ Webhook on payment confirm</div>
-        </div>
+      <div style="font-family:'Share Tech Mono',monospace;font-size:.63rem;color:var(--muted2);line-height:2;">
+        <div style="color:var(--cyan);margin-bottom:.3rem;font-weight:700;">Advantages:</div>
+        <div style="color:var(--green);">✅ GET request — simplest possible</div>
+        <div style="color:var(--green);">✅ No signing, no MD5, no headers</div>
+        <div style="color:var(--green);">✅ CORS friendly</div>
+        <div style="color:var(--green);">✅ Free KYC-free signup</div>
+        <div style="color:var(--green);">✅ Instant account activation</div>
+        <div style="color:var(--green);">✅ Webhook on payment</div>
       </div>
-    </div>
-    <div style="margin-top:1rem;padding:.85rem;background:#03030a;border-radius:8px;border:1px solid rgba(0,245,255,.1);font-family:'Share Tech Mono',monospace;font-size:.63rem;color:#00f5ff;line-height:1.9;">
-      <span style="color:var(--muted2);">// OxaPay create invoice — example</span><br>
-      POST https://api.oxapay.com/merchants/request<br>
-      merchant: &lt;your-api-key&gt;<br>
-      {<br>
-      &nbsp;&nbsp;"amount": 1.50,&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:var(--muted2);">// USD amount — no minimum!</span><br>
-      &nbsp;&nbsp;"currency": "USD",&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:var(--muted2);">// fiat</span><br>
-      &nbsp;&nbsp;"payCurrency": "USDT",&nbsp;&nbsp;&nbsp;<span style="color:var(--muted2);">// crypto</span><br>
-      &nbsp;&nbsp;"orderId": "EC-1001",&nbsp;&nbsp;&nbsp;<span style="color:var(--muted2);">// your order ID</span><br>
-      &nbsp;&nbsp;"description": "...",<br>
-      &nbsp;&nbsp;"lifeTime": 60&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:var(--muted2);">// minutes</span><br>
-      }<br>
-      <span style="color:var(--muted2);">// Response: { result: 100, payLink: "https://...", trackId: "..." }</span>
     </div>
   </div>
 </div>
 
-<!-- SUPPORTED COINS -->
 <div class="panel" style="margin-bottom:1.5rem;">
-  <div class="panel-head">
-    <div class="panel-title">🪙 Supported Coins — 50+</div>
-    <span class="pill p-ok">No Minimum</span>
-  </div>
+  <div class="panel-head"><div class="panel-title">🪙 Supported Coins</div><span class="pill p-ok">No Minimum</span></div>
   <div class="panel-body">
-    <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:.6rem;">
+    <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(115px,1fr));gap:.55rem;">
       ${[
-        {s:'BTC', n:'Bitcoin',  c:'#f7931a', e:'₿'},
-        {s:'ETH', n:'Ethereum', c:'#627eea', e:'Ξ'},
-        {s:'USDT',n:'Tether',   c:'#26a17b', e:'₮'},
-        {s:'SOL', n:'Solana',   c:'#9945ff', e:'◎'},
-        {s:'LTC', n:'Litecoin', c:'#bfd2d1', e:'Ł'},
-        {s:'XMR', n:'Monero',   c:'#ff6600', e:'ɱ'},
-        {s:'DOGE',n:'Dogecoin', c:'#c2a633', e:'Ð'},
-        {s:'BNB', n:'BNB',      c:'#f0b90b', e:'◆'},
-        {s:'TRX', n:'TRON',     c:'#ff0013', e:'✦'},
-        {s:'MATIC',n:'MATIC',   c:'#8247e5', e:'▲'},
-        {s:'USDC',n:'USDC',     c:'#2775ca', e:'◈'},
-        {s:'DAI', n:'DAI',      c:'#f5ac37', e:'⬡'},
-        {s:'ADA', n:'Cardano',  c:'#0033ad', e:'₳'},
-        {s:'DOT', n:'Polkadot', c:'#e6007a', e:'●'},
-        {s:'ATOM',n:'Cosmos',   c:'#2e3148', e:'⚛'},
-        {s:'XRP', n:'Ripple',   c:'#346aa9', e:'✕'},
+        {s:'BTC', n:'Bitcoin',       c:'#f7931a', e:'₿'},
+        {s:'ETH', n:'Ethereum',      c:'#627eea', e:'Ξ'},
+        {s:'USDT',n:'Tether TRC-20', c:'#26a17b', e:'₮'},
+        {s:'LTC', n:'Litecoin',      c:'#bfd2d1', e:'Ł'},
+        {s:'XMR', n:'Monero',        c:'#ff6600', e:'ɱ'},
+        {s:'DOGE',n:'Dogecoin',      c:'#c2a633', e:'Ð'},
+        {s:'BCH', n:'Bitcoin Cash',  c:'#8dc351', e:'₿'},
+        {s:'BNB', n:'BNB',           c:'#f0b90b', e:'◆'},
+        {s:'SOL', n:'Solana',        c:'#9945ff', e:'◎'},
+        {s:'TRX', n:'TRON',          c:'#ff0013', e:'✦'},
+        {s:'USDC',n:'USD Coin',      c:'#2775ca', e:'◈'},
+        {s:'EOS', n:'EOS',           c:'#ffffff', e:'⬡'},
       ].map(c=>`
-        <div style="border:1px solid var(--border2);border-radius:8px;padding:.55rem .7rem;display:flex;align-items:center;gap:.45rem;background:rgba(255,255,255,.016);">
-          <div style="width:24px;height:24px;border-radius:5px;background:${c.c}22;display:flex;align-items:center;justify-content:center;font-size:.8rem;color:${c.c};flex-shrink:0;">${c.e}</div>
-          <div>
-            <div style="font-family:'Orbitron',sans-serif;font-size:.55rem;font-weight:700;">${c.s}</div>
-            <div style="font-family:'Share Tech Mono',monospace;font-size:.48rem;color:var(--muted2);">${c.n}</div>
-          </div>
+        <div style="border:1px solid var(--border2);border-radius:8px;padding:.5rem .65rem;display:flex;align-items:center;gap:.4rem;background:rgba(255,255,255,.016);">
+          <div style="width:22px;height:22px;border-radius:5px;background:${c.c}22;display:flex;align-items:center;justify-content:center;font-size:.75rem;color:${c.c};flex-shrink:0;">${c.e}</div>
+          <div><div style="font-family:'Orbitron',sans-serif;font-size:.52rem;font-weight:700;">${c.s}</div><div style="font-family:'Share Tech Mono',monospace;font-size:.46rem;color:var(--muted2);">${c.n}</div></div>
         </div>`).join('')}
-      <div style="border:1px dashed var(--border2);border-radius:8px;padding:.55rem .7rem;display:flex;align-items:center;justify-content:center;font-family:'Share Tech Mono',monospace;font-size:.58rem;color:var(--muted2);">+34 more...</div>
     </div>
   </div>
 </div>
 
-<!-- INVOICE LOG -->
 <div class="panel">
   <div class="panel-head">
-    <div class="panel-title">📋 Invoice Log (Session)</div>
+    <div class="panel-title">📋 Invoice Log</div>
     <button class="btn btn-ghost btn-xs" onclick="gwClearLog()">🗑 Clear</button>
   </div>
   <div class="tbl-wrap">
     <table>
-      <thead><tr><th>Order ID</th><th>Amount</th><th>Coin</th><th>Track ID</th><th>Status</th><th>Payment Link</th><th>Created</th></tr></thead>
+      <thead><tr><th>Order ID</th><th>Amount</th><th>Coin</th><th>Txn ID</th><th>Status</th><th>Link</th><th>Time</th></tr></thead>
       <tbody id="gw-log-body">
-        <tr><td colspan="7" style="text-align:center;padding:2rem;font-family:'Share Tech Mono',monospace;font-size:.7rem;color:var(--muted2);">
-          No invoices yet — configure API key aur invoice banao
-        </td></tr>
+        <tr><td colspan="7" style="text-align:center;padding:2rem;font-family:'Share Tech Mono',monospace;font-size:.7rem;color:var(--muted2);">No invoices yet</td></tr>
       </tbody>
     </table>
   </div>
 </div>`;
-  gwLoadOxaConfig();
+  gwLoad();
   gwRenderLog();
 };
 
 // ══════════════════════════════════
-// OXAPAY FUNCTIONS
+// PLISIO FUNCTIONS
 // ══════════════════════════════════
-
-function gwCheckOxaKey() {
-  const key = document.getElementById('gw-oxapay-key')?.value || '';
-  const dot = document.getElementById('gw-status-dot');
-  const txt = document.getElementById('gw-status-txt');
+function gwCheckKey() {
+  const key = document.getElementById('gw-plisio-key')?.value || '';
+  const dot = document.getElementById('gw-dot');
+  const txt = document.getElementById('gw-status');
   if (!dot || !txt) return;
-  if (key.length > 10) {
-    dot.style.background = '#ffd600';
-    txt.textContent = 'Key entered — save karo';
-  } else {
-    dot.style.background = '#555';
-    txt.textContent = 'Not configured';
-  }
+  if (key.length > 10) { dot.style.background = '#ffd600'; txt.textContent = 'Key entered — save karo'; }
+  else { dot.style.background = '#555'; txt.textContent = 'Not configured'; }
 }
 
-function gwSaveOxaConfig() {
-  const key      = document.getElementById('gw-oxapay-key')?.value.trim() || '';
-  const callback = document.getElementById('gw-callback')?.value.trim() || '';
-  const ret      = document.getElementById('gw-return')?.value.trim() || '';
+function gwSave() {
+  const key = document.getElementById('gw-plisio-key')?.value.trim() || '';
+  const cb  = document.getElementById('gw-callback-url')?.value.trim() || '';
+  const su  = document.getElementById('gw-success-url')?.value.trim() || '';
   if (!key) { toast('err', '⚠ API key required!'); return; }
-  try {
-    localStorage.setItem('oxa_key', key);
-    localStorage.setItem('oxa_callback', callback);
-    localStorage.setItem('oxa_return', ret);
-  } catch(e) {}
+  localStorage.setItem('plisio_key', key);
+  localStorage.setItem('plisio_cb', cb);
+  localStorage.setItem('plisio_su', su);
   const msg = document.getElementById('gw-save-msg');
-  const dot = document.getElementById('gw-status-dot');
-  const txt = document.getElementById('gw-status-txt');
-  if (msg) { msg.textContent = '✅ Config saved!'; msg.style.color = 'var(--green)'; }
+  const dot = document.getElementById('gw-dot');
+  const txt = document.getElementById('gw-status');
+  if (msg) { msg.textContent = '✅ Saved!'; msg.style.color = 'var(--green)'; }
   if (dot) dot.style.background = 'var(--green)';
   if (txt) txt.textContent = 'Configured ✓';
-  toast('ok', '✅ OxaPay config saved!');
+  toast('ok', '✅ Plisio config saved!');
 }
 
-function gwLoadOxaConfig() {
+function gwLoad() {
   try {
-    const key = localStorage.getItem('oxa_key') || '';
-    const cb  = localStorage.getItem('oxa_callback') || '';
-    const ret = localStorage.getItem('oxa_return') || '';
-    const keyEl = document.getElementById('gw-oxapay-key');
-    const cbEl  = document.getElementById('gw-callback');
-    const retEl = document.getElementById('gw-return');
-    if (keyEl && key) keyEl.value = key;
-    if (cbEl && cb)   cbEl.value  = cb;
-    if (retEl && ret) retEl.value = ret;
-    const dot = document.getElementById('gw-status-dot');
-    const txt = document.getElementById('gw-status-txt');
-    if (key && dot && txt) {
-      dot.style.background = 'var(--green)';
-      txt.textContent = 'Configured ✓';
-    }
+    const key = localStorage.getItem('plisio_key') || '';
+    const cb  = localStorage.getItem('plisio_cb') || '';
+    const su  = localStorage.getItem('plisio_su') || '';
+    const ke = document.getElementById('gw-plisio-key');
+    const ce = document.getElementById('gw-callback-url');
+    const se = document.getElementById('gw-success-url');
+    if (ke && key) ke.value = key;
+    if (ce && cb)  ce.value = cb;
+    if (se && su)  se.value = su;
+    const dot = document.getElementById('gw-dot');
+    const txt = document.getElementById('gw-status');
+    if (key && dot && txt) { dot.style.background = 'var(--green)'; txt.textContent = 'Configured ✓'; }
   } catch(e) {}
 }
 
-async function gwTestConn() {
-  const key = localStorage.getItem('oxa_key') || '';
+async function gwTest() {
+  const key = localStorage.getItem('plisio_key') || '';
   if (!key) { toast('err', '⚠ Pehle API key save karo!'); return; }
-  toast('info', '⏳ OxaPay se connect ho raha hai...');
-  const dot = document.getElementById('gw-status-dot');
-  const txt = document.getElementById('gw-status-txt');
+  toast('info', '⏳ Plisio se connect ho raha hai...');
   try {
-    const res = await fetch('https://api.oxapay.com/merchants/balance', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ merchant: key }),
-    });
+    const url = 'https://plisio.net/api/v1/balances?api_key=' + encodeURIComponent(key);
+    const res  = await fetch(url);
     const data = await res.json();
-    if (data.result === 100) {
+    const dot  = document.getElementById('gw-dot');
+    const txt  = document.getElementById('gw-status');
+    if (data.status === 'success') {
       if (dot) dot.style.background = 'var(--green)';
       if (txt) txt.textContent = 'Connected ✅';
-      toast('ok', '✅ OxaPay connected! Balance: ' + JSON.stringify(data.balance || '—'));
+      toast('ok', '✅ Plisio connected successfully!');
     } else {
       if (dot) dot.style.background = 'var(--red)';
       if (txt) txt.textContent = 'Auth failed ❌';
-      toast('err', '❌ OxaPay error: ' + (data.message || JSON.stringify(data)));
+      toast('err', '❌ Error: ' + (data.data?.message || JSON.stringify(data)));
     }
   } catch(e) {
-    // CORS issue — OxaPay needs same-origin or backend proxy for balance check
-    if (dot) dot.style.background = '#ffd600';
-    if (txt) txt.textContent = 'CORS — use backend proxy for balance';
-    toast('warn', '⚠ Balance check needs backend proxy. Invoice creation works fine.');
+    toast('warn', '⚠ Network/CORS issue — key save karo aur invoice banao, wo kaam karega.');
   }
 }
 
-let _lastTrackId = '';
-
-async function gwCreateOxaInvoice() {
-  const key    = localStorage.getItem('oxa_key') || '';
+async function gwCreate() {
+  const key    = localStorage.getItem('plisio_key') || '';
   const amt    = parseFloat(document.getElementById('inv-amount')?.value || 0);
-  const coin   = document.getElementById('inv-coin')?.value || 'USDT';
+  const coin   = document.getElementById('inv-coin')?.value || 'BTC';
   const order  = document.getElementById('inv-order-id')?.value.trim() || ('EC-' + Date.now());
   const desc   = document.getElementById('inv-desc')?.value.trim() || 'Echy Store Order';
   const expiry = parseInt(document.getElementById('inv-expiry')?.value || 60);
-  const cb     = localStorage.getItem('oxa_callback') || '';
-  const ret    = localStorage.getItem('oxa_return') || '';
+  const cb     = localStorage.getItem('plisio_cb') || '';
+  const su     = localStorage.getItem('plisio_su') || '';
 
-  if (!key) { toast('err', '⚠ Pehle OxaPay API key save karo!'); return; }
-  if (!amt || amt <= 0) { toast('err', '⚠ Amount daalo!'); return; }
+  if (!key)  { toast('err', '⚠ Pehle Plisio API key save karo!'); return; }
+  if (!amt || amt <= 0) { toast('err', '⚠ Valid amount daalo!'); return; }
 
   toast('info', '⏳ Invoice create ho raha hai...');
 
-  const body = {
-    merchant:    key,
-    amount:      amt,
-    currency:    'USD',
-    payCurrency: coin,
-    orderId:     order,
-    description: desc,
-    lifeTime:    expiry,
-    feePaidByPayer: 0,
-  };
-  if (cb)  body.callbackUrl  = cb;
-  if (ret) body.returnUrl    = ret;
+  const params = new URLSearchParams({
+    api_key:          key,
+    currency:         coin,
+    source_currency:  'USD',
+    source_amount:    amt.toString(),
+    order_number:     order,
+    order_name:       desc,
+    expire_min:       expiry.toString(),
+  });
+  if (cb) params.set('callback_url', cb);
+  if (su) params.set('success_callback_url', su);
 
   try {
-    const res = await fetch('https://api.oxapay.com/merchants/request', {
-      method:  'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body:    JSON.stringify(body),
-    });
+    const res  = await fetch('https://plisio.net/api/v1/invoices/new?' + params.toString());
     const data = await res.json();
 
-    if (data.result === 100 && data.payLink) {
-      _lastTrackId = data.trackId || '';
-      document.getElementById('inv-link').textContent = data.payLink;
+    if (data.status === 'success' && data.data?.invoice_url) {
+      const d = data.data;
+      document.getElementById('inv-link').textContent  = d.invoice_url;
       document.getElementById('inv-extra').textContent =
-        'Track ID: ' + (_lastTrackId || '—') + '  |  Order: ' + order + '  |  Amount: $' + amt + ' → ' + coin;
+        'Txn ID: ' + (d.txn_id || '—') + '\nOrder: ' + order + '  |  Amount: $' + amt + ' → ' + coin;
       document.getElementById('inv-result').style.display = 'block';
-      gwAddLog({ id: order, amt: '$' + amt, coin, trackId: _lastTrackId, url: data.payLink, status: 'Pending', ts: new Date().toLocaleTimeString() });
+      gwAddLog({ id: order, amt: '$' + amt, coin, txnId: d.txn_id || '—', url: d.invoice_url, status: 'Pending', ts: new Date().toLocaleTimeString() });
       const c = document.getElementById('gw-inv-count');
       if (c) c.textContent = parseInt(c.textContent || 0) + 1;
-      toast('ok', '✅ Invoice created! Customer ko link bhejo.');
+      toast('ok', '✅ Invoice created! Link copy karo.');
     } else {
-      toast('err', '❌ OxaPay: ' + (data.message || JSON.stringify(data)));
+      toast('err', '❌ Plisio: ' + (data.data?.message || data.message || JSON.stringify(data)));
     }
   } catch(e) {
-    toast('err', '❌ Network error: ' + e.message + '. Backend proxy use karo ya oxapay.com se manually banao.');
-  }
-}
-
-async function gwCheckStatus() {
-  const key = localStorage.getItem('oxa_key') || '';
-  if (!key || !_lastTrackId) { toast('warn', '⚠ Invoice create karo pehle.'); return; }
-  toast('info', '⏳ Status check ho raha hai...');
-  try {
-    const res = await fetch('https://api.oxapay.com/merchants/inquiry', {
-      method:  'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body:    JSON.stringify({ merchant: key, trackId: _lastTrackId }),
-    });
-    const data = await res.json();
-    const statusMap = { 1:'Waiting', 2:'Confirming', 3:'Paid ✅', 4:'Expired', 5:'Failed', 6:'Refunded' };
-    const st = statusMap[data.status] || ('Status: ' + data.status);
-    toast(data.status === 3 ? 'ok' : 'info', 'Invoice status: ' + st);
-  } catch(e) {
-    toast('err', 'Status check failed: ' + e.message);
+    toast('err', '❌ Network error: ' + e.message);
   }
 }
 
@@ -2506,13 +2427,13 @@ function gwRenderLog() {
       return;
     }
     tbody.innerHTML = logs.map(l => `<tr>
-      <td style="font-family:'Share Tech Mono',monospace;font-size:.7rem;color:var(--pink);">${l.id}</td>
-      <td style="font-family:'Orbitron',sans-serif;font-size:.75rem;font-weight:700;color:var(--green);">${l.amt}</td>
-      <td style="font-family:'Share Tech Mono',monospace;font-size:.7rem;color:var(--muted2);">${l.coin}</td>
-      <td style="font-family:'Share Tech Mono',monospace;font-size:.6rem;color:var(--cyan);">${l.trackId || '—'}</td>
+      <td class="mono pink" style="font-size:.7rem;">${l.id}</td>
+      <td class="mono bold" style="color:var(--green);">${l.amt}</td>
+      <td class="mono muted-c">${l.coin}</td>
+      <td class="mono" style="font-size:.6rem;color:var(--cyan);">${l.txnId || '—'}</td>
       <td><span class="pill p-warn">${l.status}</span></td>
       <td><a href="${l.url}" target="_blank" style="color:var(--cyan);font-family:'Share Tech Mono',monospace;font-size:.6rem;">Open ↗</a></td>
-      <td style="font-family:'Share Tech Mono',monospace;font-size:.6rem;color:var(--muted2);">${l.ts}</td>
+      <td class="mono muted-c" style="font-size:.6rem;">${l.ts}</td>
     </tr>`).join('');
   } catch(e) {}
 }
@@ -2521,11 +2442,6 @@ function gwClearLog() {
   try { localStorage.removeItem('gw_logs'); } catch(e) {}
   gwRenderLog();
   toast('ok', 'Log cleared.');
-}
-
-function gwOpenCreate() {
-  const el = document.getElementById('inv-amount');
-  if (el) el.focus();
 }
 /* ═══════════════════════════════════════════
    PAGE: WALLETS
